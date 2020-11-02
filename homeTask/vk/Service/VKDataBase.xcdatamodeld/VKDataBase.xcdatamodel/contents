@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19F96" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="GroupDB" representedClassName="GroupDB" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="photoLargeURL" optional="YES" attributeType="String"/>
+        <attribute name="photoMediumURL" optional="YES" attributeType="String"/>
+        <attribute name="photoSmallURL" optional="YES" attributeType="String"/>
+        <attribute name="screenName" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="PhotoDB" representedClassName="PhotoDB" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="likesCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="ownerId" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="photoLargeURL" optional="YES" attributeType="String"/>
+        <attribute name="photoMediumURL" optional="YES" attributeType="String"/>
+        <attribute name="photoSmallURL" optional="YES" attributeType="String"/>
+        <attribute name="userLike" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="UserDB" representedClassName="UserDB" syncable="YES">
+        <attribute name="avatarPhotoURL" optional="YES" attributeType="String"/>
+        <attribute name="cityTitle" optional="YES" attributeType="String"/>
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="PhotoDB" positionX="-18" positionY="63" width="128" height="163"/>
+        <element name="UserDB" positionX="-45" positionY="0" width="128" height="118"/>
+        <element name="GroupDB" positionX="-27" positionY="90" width="128" height="133"/>
+    </elements>
+</model>

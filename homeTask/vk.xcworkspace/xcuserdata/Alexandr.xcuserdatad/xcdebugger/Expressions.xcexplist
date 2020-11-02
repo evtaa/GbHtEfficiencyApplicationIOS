@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "PhotosMyFriendCollectionViewController.collectionView(_:cellForItemAt:):PhotosMyFriendCollectionViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "indexPath.row">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "MyCommunitiesTableViewController.viewDidLoad():MyCommunitiesTableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Session.instance.userId">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in MyCommunitiesTableViewController.notificationChangingGroupsInFirebase():MyCommunitiesTableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self?.myGroups">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in MyFriendsTableViewController.notificationChangingUsersInFirebase():MyFriendsTableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "usersOfApplication">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
