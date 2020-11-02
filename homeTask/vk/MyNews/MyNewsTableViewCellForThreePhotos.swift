@@ -1,5 +1,5 @@
 //
-//  MyNewsTableViewCell.swift
+//  MyNewsTableViewCellForThreePhotos.swift
 //  vk
 //
 //  Created by Alexandr Evtodiy on 01.11.2020.
@@ -8,20 +8,22 @@
 
 import UIKit
 
-class MyNewsTableViewCell: UITableViewCell {
-
+class MyNewsTableViewCellForThreePhotos: UITableViewCell {
     @IBOutlet weak var avatarShadow: UIView!
     @IBOutlet weak var avatarMyFriendNews: UIImageView!
     @IBOutlet weak var nameMyFriendNews: UILabel!
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var contentLabelNews: UILabel!
+    @IBOutlet weak var imageContentFirstView: UIImageView!
+    @IBOutlet weak var imageContentSecondView: UIImageView!
+    @IBOutlet weak var imageContentThirdView: UIImageView!
     @IBOutlet weak var likeUIControl: LikeUIControl!
     @IBOutlet weak var commentShareUIControl: CommentShareUIControl!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        setupAvatar ()
+        setupAvatar()
+       
         // Initialization code
     }
     
@@ -50,6 +52,10 @@ class MyNewsTableViewCell: UITableViewCell {
         date.text = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(new.date)))
         
         contentLabelNews.text = new.text
+        
+        imageContentFirstView.load(url: new.listPhotoImageURL[0])
+        imageContentSecondView.load(url: new.listPhotoImageURL[1])
+        imageContentThirdView.load(url: new.listPhotoImageURL[2])
 
         let userLike = new.userLikes != 0
         likeUIControl.likeButton.setTitle(userLike ? "❤" : "💜", for: .normal)

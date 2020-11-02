@@ -1,20 +1,21 @@
 //
-//  MyNewsTableViewCell.swift
+//  MyNewsTableViewCellForTwoFoto.swift
 //  vk
 //
-//  Created by Alexandr Evtodiy on 01.11.2020.
+//  Created by Alexandr Evtodiy on 31.10.2020.
 //  Copyright © 2020 Alexandr Evtodiy. All rights reserved.
 //
 
 import UIKit
 
-class MyNewsTableViewCell: UITableViewCell {
-
+class MyNewsTableViewCellForTwoPhotos: UITableViewCell {
     @IBOutlet weak var avatarShadow: UIView!
     @IBOutlet weak var avatarMyFriendNews: UIImageView!
     @IBOutlet weak var nameMyFriendNews: UILabel!
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var contentLabelNews: UILabel!
+    @IBOutlet weak var imageContentFirstView: UIImageView!
+    @IBOutlet weak var imageContentSecondView: UIImageView!
     @IBOutlet weak var likeUIControl: LikeUIControl!
     @IBOutlet weak var commentShareUIControl: CommentShareUIControl!
     
@@ -39,7 +40,7 @@ class MyNewsTableViewCell: UITableViewCell {
         avatarShadow.layer.shadowOffset = CGSize(width: 3, height: 3)
         avatarShadow.layer.cornerRadius = avatarShadow.bounds.height/2
     }
-    
+
     func setup (new: VkApiNewItem) {
         avatarMyFriendNews.load(url: new.avatarImageURL)
         nameMyFriendNews.text = new.nameGroupOrUser
@@ -50,6 +51,9 @@ class MyNewsTableViewCell: UITableViewCell {
         date.text = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(new.date)))
         
         contentLabelNews.text = new.text
+        
+        imageContentFirstView.load(url: new.listPhotoImageURL[0])
+        imageContentSecondView.load(url: new.listPhotoImageURL[1])
 
         let userLike = new.userLikes != 0
         likeUIControl.likeButton.setTitle(userLike ? "❤" : "💜", for: .normal)
@@ -60,7 +64,7 @@ class MyNewsTableViewCell: UITableViewCell {
         let shareCount = new.repostCount
         commentShareUIControl.shareCount.text = String(shareCount)
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state

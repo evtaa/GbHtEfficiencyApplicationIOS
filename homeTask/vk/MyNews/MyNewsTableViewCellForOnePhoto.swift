@@ -2,19 +2,20 @@
 //  MyNewsTableViewCell.swift
 //  vk
 //
-//  Created by Alexandr Evtodiy on 01.11.2020.
+//  Created by Alexandr Evtodiy on 02.09.2020.
 //  Copyright © 2020 Alexandr Evtodiy. All rights reserved.
 //
 
 import UIKit
 
-class MyNewsTableViewCell: UITableViewCell {
-
+class MyNewsTableViewCellForOnePhoto: UITableViewCell {
+    
     @IBOutlet weak var avatarShadow: UIView!
     @IBOutlet weak var avatarMyFriendNews: UIImageView!
     @IBOutlet weak var nameMyFriendNews: UILabel!
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var contentLabelNews: UILabel!
+    @IBOutlet weak var imageContentView: UIImageView!
     @IBOutlet weak var likeUIControl: LikeUIControl!
     @IBOutlet weak var commentShareUIControl: CommentShareUIControl!
     
@@ -50,7 +51,8 @@ class MyNewsTableViewCell: UITableViewCell {
         date.text = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(new.date)))
         
         contentLabelNews.text = new.text
-
+        imageContentView.load(url: new.listPhotoImageURL[0])
+        
         let userLike = new.userLikes != 0
         likeUIControl.likeButton.setTitle(userLike ? "❤" : "💜", for: .normal)
         let likesCount = new.likesCount
@@ -60,7 +62,7 @@ class MyNewsTableViewCell: UITableViewCell {
         let shareCount = new.repostCount
         commentShareUIControl.shareCount.text = String(shareCount)
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state

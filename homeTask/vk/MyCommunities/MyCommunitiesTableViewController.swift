@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import RealmSwift
 import FirebaseDatabase
 import FirebaseAuth
 
@@ -17,12 +16,10 @@ class MyCommunitiesTableViewController: UITableViewController {
     internal let newRefreshControl = UIRefreshControl()
     var myGroups = [FirebaseGroup] ()
     let vkService = VKService ()
-    var token: NotificationToken?
-    var firebaseSaveService = FirebaseSaveService ()
+
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupTableView ()
         setupRefreshControl ()
         
@@ -63,7 +60,7 @@ class MyCommunitiesTableViewController: UITableViewController {
     
     private func notificationChangingGroupsInFirebase () {
         //создаем наблюдатель изменений в ветке refBranchUsers
-        firebaseSaveService.refBranchGroups.observe(.value, with: { [weak self] snapshot in
+        vkService.firebaseSaveService.refBranchGroups.observe(.value, with: { [weak self] snapshot in
             var groups: [FirebaseGroup] = []
             for child in snapshot.children {
                         if let snapshot = child as? DataSnapshot,
@@ -76,6 +73,22 @@ class MyCommunitiesTableViewController: UITableViewController {
             self?.newRefreshControl.endRefreshing()
         })
     }
+    
+//    private func notificationChangingGroupsInFirebase () {
+//        //создаем наблюдатель изменений в ветке refBranchUsers
+//        firebaseSaveService.refBranchGroups.observe(.value, with: { [weak self] snapshot in
+//            var groups: [FirebaseGroup] = []
+//            for child in snapshot.children {
+//                        if let snapshot = child as? DataSnapshot,
+//                           let group = FirebaseGroup(snapshot: snapshot) {
+//                               groups.append(group)
+//                        }
+//                    }
+//            self?.myGroups = groups
+//            self?.tableView.reloadData()
+//            self?.newRefreshControl.endRefreshing()
+//        })
+//    }
 
     // MARK: - Table view data source
     
@@ -97,9 +110,7 @@ class MyCommunitiesTableViewController: UITableViewController {
         let numberOfRows = self.tableView.numberOfRows(inSection: 0)
         guard indexPath.row <= numberOfRows else {return cell}
         let myGroup  = self.myGroups [indexPath.row]
-        
         cell.setup(group: myGroup)
-        
         return cell
     }
     
@@ -109,7 +120,7 @@ class MyCommunitiesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-             let group = myGroups [indexPath.row]
+            let group = myGroups [indexPath.row]
             group.ref?.removeValue()
         }
     }

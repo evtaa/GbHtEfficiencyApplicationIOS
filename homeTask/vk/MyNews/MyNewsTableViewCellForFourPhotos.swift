@@ -1,5 +1,5 @@
 //
-//  MyNewsTableViewCell.swift
+//  MyNewsTableViewCellForFourPhotos.swift
 //  vk
 //
 //  Created by Alexandr Evtodiy on 01.11.2020.
@@ -8,14 +8,18 @@
 
 import UIKit
 
-class MyNewsTableViewCell: UITableViewCell {
-
+class MyNewsTableViewCellForFourPhotos: UITableViewCell {
     @IBOutlet weak var avatarShadow: UIView!
     @IBOutlet weak var avatarMyFriendNews: UIImageView!
     @IBOutlet weak var nameMyFriendNews: UILabel!
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var contentLabelNews: UILabel!
+    @IBOutlet weak var imageContentFirstView: UIImageView!
+    @IBOutlet weak var imageContentSecondView: UIImageView!
+    @IBOutlet weak var imageContentThirdView: UIImageView!
+    @IBOutlet weak var imageContentFourthView: UIImageView!
     @IBOutlet weak var likeUIControl: LikeUIControl!
+    @IBOutlet weak var countNotViewedPhotos: UILabel!
     @IBOutlet weak var commentShareUIControl: CommentShareUIControl!
     
     override func awakeFromNib() {
@@ -24,7 +28,7 @@ class MyNewsTableViewCell: UITableViewCell {
         setupAvatar ()
         // Initialization code
     }
-    
+
     func setupAvatar () {
         avatarMyFriendNews.layer.cornerRadius = avatarMyFriendNews.frame.height/2
         let f = avatarMyFriendNews.frame
@@ -41,6 +45,7 @@ class MyNewsTableViewCell: UITableViewCell {
     }
     
     func setup (new: VkApiNewItem) {
+        
         avatarMyFriendNews.load(url: new.avatarImageURL)
         nameMyFriendNews.text = new.nameGroupOrUser
 
@@ -50,7 +55,18 @@ class MyNewsTableViewCell: UITableViewCell {
         date.text = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(new.date)))
         
         contentLabelNews.text = new.text
-
+        
+        imageContentFirstView.load(url: new.listPhotoImageURL[0])
+        imageContentSecondView.load(url: new.listPhotoImageURL[1])
+        imageContentThirdView.load(url: new.listPhotoImageURL[2])
+        imageContentFourthView.load(url: new.listPhotoImageURL[3])
+        
+        if new.listPhotoImageURL.count > 4 {
+            countNotViewedPhotos.text = "+\(new.listPhotoImageURL.count - 4)"
+        } else {
+            countNotViewedPhotos.text = ""
+        }
+        
         let userLike = new.userLikes != 0
         likeUIControl.likeButton.setTitle(userLike ? "❤" : "💜", for: .normal)
         let likesCount = new.likesCount
@@ -60,9 +76,40 @@ class MyNewsTableViewCell: UITableViewCell {
         let shareCount = new.repostCount
         commentShareUIControl.shareCount.text = String(shareCount)
     }
-
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
+    }
+    
+//    func getUIImageFromURL ( inputURL: String) -> UIImage {
+//        let url = URL(string: inputURL)
+//        if let data = try? Data(contentsOf: url!)
+//            {
+//                return UIImage(data: data) ?? UIImage()
+//            }
+//        return  UIImage()
+//    }
+    
+}
+
+extension UIImageView {
+    func load(url: URL) {
+        DispatchQueue.global().async { [weak self] in
+            if let data = try? Data(contentsOf: url) {
+                if let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self?.image = image
+                    }
+                }
+            }
+        }
+    }
+    
+    func load (url: String?) {
+        if let urlImageString = url {
+            if let url = URL (string: urlImageString) {
+                self.load(url: url)
+            }
+        }
     }
 }

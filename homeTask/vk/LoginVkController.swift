@@ -42,6 +42,7 @@ class LoginVkController: UIViewController {
     
     // Функция формирования запроса для регистрации аккаунта в приложении
     func getRequestForRegistrationVK (api_id: String) -> URLRequest {
+        let scope = 262150 | (1 << 16) | (1 << 13)
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "oauth.vk.com"
@@ -51,7 +52,7 @@ class LoginVkController: UIViewController {
             URLQueryItem(name: "display", value: "mobile"),
             // Адрес, на который будет переадресован пользователь после прохождения авторизации
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
-            URLQueryItem(name: "scope", value: "262150"),
+            URLQueryItem(name: "scope", value: String(scope)),
             URLQueryItem(name: "response_type", value: "token"),
             URLQueryItem(name: "revoke", value: "1"),
             URLQueryItem(name: "v", value: "5.68")

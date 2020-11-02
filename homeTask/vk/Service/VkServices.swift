@@ -35,6 +35,8 @@ class VKService {
     let coreDataSaveService = CoreDataSaveService ()
     let firebaseSaveService = FirebaseSaveService ()
     
+    var nextFrom = ""
+    
     
     // Функция сохранения текущего пользователя приложением
     func saveCurrentUserApplication (userId: Int) {
@@ -51,7 +53,7 @@ class VKService {
             //"list_id": "",
             //"count": "10",
             "offset": "0",
-            "fields": "city,photo_200",
+            "fields": "city,photo_100",
             "name_case": "nom",
             "v": "5.68",
             "access_token": Session.instance.token!
@@ -225,6 +227,67 @@ class VKService {
             }
         }
     }
+    
+    func loadNewsData(){
+        let path = "/newsfeed.get"
+        let parameters: Parameters = [
+            "filters": "post, photo",
+            "return_banned": "0",
+            //"start_time": "",
+            //"end_time": "",
+            //"max_photos": "",
+            //"source_ids": "",
+            // "start_from": nextFrom,
+            "count": "50",
+            //"fields": "",
+            //"section": "",
+            "v": "5.68",
+            "access_token": Session.instance.token!
+        ]
+        
+        // составляем URL из базового адреса сервиса и конкретного метода
+        let url = baseUrl+path
+        // делаем запрос
+        Alamofire.request(url, method: .get, parameters: parameters).responseData { [weak self] response in
+            switch response.result{
+            case .success(let data):
+                do {
+                    debugPrint (data)
+                    let  vkApiNewsResponse = try JSONDecoder().decode (VkApiNewsResponse.self, from: data)
+                    let VkApiNewsResponseItems = vkApiNewsResponse.response.items
+                    let VkApiNewsResponseProfiles = vkApiNewsResponse.response.profiles
+                    let VkApiNewsResponseGroups = vkApiNewsResponse.response.groups
+                    for object in VkApiNewsResponseItems {
+                        if object.sourceId > 0 {
+                            let profile = VkApiNewsResponseProfiles.filter({$0.id == object.sourceId}).first
+                            object.avatarImageURL = profile?.avatarPhotoURL ?? ""
+                            object.nameGroupOrUser = (profile?.firstName ?? "") + " " + (profile?.lastName ?? "")
+                        }
+                        else {
+                            let group = VkApiNewsResponseGroups.filter({$0.id == abs(object.sourceId)}).first
+                            object.avatarImageURL = group?.photoMediumURL ?? ""
+                            object.nameGroupOrUser = group?.name ?? ""
+                        }
+                    }
+                    // Save user array to Database
+                    // Working with Realm
+                    self?.realmSaveService.updateNews(news: VkApiNewsResponseItems)
+                    debugPrint (data)
+                }
+                catch DecodingError.dataCorrupted(let context) {
+                    debugPrint(DecodingError.dataCorrupted(context))
+                }
+                catch let error {
+                    debugPrint("Decoding's error \(url)")
+                    debugPrint(error)
+                    debugPrint(String(bytes: data, encoding: .utf8) ?? "")
+                }
+            case .failure(let error):
+                debugPrint(error)
+            }
+        }
+    }
+    
 }
 
 

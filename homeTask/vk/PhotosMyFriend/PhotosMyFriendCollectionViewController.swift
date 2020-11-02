@@ -79,37 +79,13 @@ class PhotosMyFriendCollectionViewController: UICollectionViewController {
             case .initial (let results):
                 guard !results.isInvalidated else {return}
                 //let photosFriend = [VkApiPhotoItem](results)
-                var photosFriend:[VkApiPhotoItem] = [VkApiPhotoItem] ()
-                for object in results {
-                    let photo: VkApiPhotoItem = VkApiPhotoItem ()
-                    photo.id = Int(object.id)
-                    photo.date = Int(object.date)
-                    photo.ownerId = Int(object.ownerId)
-                    photo.likesCount =  Int(object.likesCount)
-                    photo.userLike =  Int(object.userLike)
-                    photo.photoSmallURL =  object.photoSmallURL
-                    photo.photoMediumURL =  object.photoMediumURL
-                    photo.photoLargeURL =  object.photoLargeURL
-                    photosFriend.append(photo)
-                }
+                let photosFriend = self.transRealmAnswerToArray (answer: results)
                 debugPrint(".initial : \(photosFriend.count) photosFriend loaded from DB")
                 completion(photosFriend)
             case .update (let results, _, _, _):
                 guard !results.isInvalidated else {return}
                 //let photosFriend = [VkApiPhotoItem](results)
-                    var photosFriend:[VkApiPhotoItem] = [VkApiPhotoItem] ()
-                    for object in results {
-                        let photo: VkApiPhotoItem = VkApiPhotoItem ()
-                        photo.id = Int(object.id)
-                        photo.date = Int(object.date)
-                        photo.ownerId = Int(object.ownerId)
-                        photo.likesCount =  Int(object.likesCount)
-                        photo.userLike =  Int(object.userLike)
-                        photo.photoSmallURL =  object.photoSmallURL
-                        photo.photoMediumURL =  object.photoMediumURL
-                        photo.photoLargeURL =  object.photoLargeURL
-                        photosFriend.append(photo)
-                    }
+                let photosFriend = self.transRealmAnswerToArray (answer: results)
                 debugPrint(".update : \(photosFriend.count) photosFriend loaded from DB")
                 completion(photosFriend)
             case .error(let error):
@@ -117,6 +93,23 @@ class PhotosMyFriendCollectionViewController: UICollectionViewController {
                 debugPrint(error)
             }
         }
+    }
+    
+    private func transRealmAnswerToArray (answer: List<VkApiPhotoItem>) -> [VkApiPhotoItem]  {
+        var array:[VkApiPhotoItem] = [VkApiPhotoItem] ()
+        for object in answer {
+            let photo: VkApiPhotoItem = VkApiPhotoItem ()
+            photo.id = Int(object.id)
+            photo.date = Int(object.date)
+            photo.ownerId = Int(object.ownerId)
+            photo.likesCount =  Int(object.likesCount)
+            photo.userLike =  Int(object.userLike)
+            photo.photoSmallURL =  object.photoSmallURL
+            photo.photoMediumURL =  object.photoMediumURL
+            photo.photoLargeURL =  object.photoLargeURL
+            array.append(photo)
+        }
+        return array
     }
     
     // MARK: UICollectionViewDataSource
