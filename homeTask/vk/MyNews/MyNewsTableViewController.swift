@@ -63,7 +63,7 @@ class MyNewsTableViewController: UITableViewController {
     }
     
     private func fetchNewsData () {
-        vkService.loadNewsData()
+        vkService.loadNewsData(typeNew: .post,.photo)
     }
 
     func pairTableAndRealm(completion: @escaping  ([VkApiNewItem]) -> Void ) {
@@ -107,13 +107,7 @@ class MyNewsTableViewController: UITableViewController {
             new.userReposted = object.userReposted
             new.typeAttachment =  object.typeAttachment
             new.listPhotoImageURL =  object.listPhotoImageURL
-//            if object.listPhotoImageURL.count != 0 {
-//                for index in 0...object.listPhotoImageURL.count-1 {
-//                    if let urlPhoto = object.listPhotoImageURL[index] {
-//                        new.listPhotoImageURL.append(urlPhoto)
-//                    }
-//                }
-//            }
+            new.listPhotoAttachmentImageURL = object.listPhotoAttachmentImageURL
             array.append(new)
         }
         return array
@@ -138,33 +132,42 @@ class MyNewsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         guard let myNew  = self.myNews? [indexPath.row] else {return cell}
+        guard let type = myNew.type else {return cell}
+        var countImages: Int
         
-        if myNew.listPhotoImageURL.count == 0 {
+        switch type {
+        case "photo":
+            countImages = myNew.listPhotoImageURL.count
+        case "post":
+            countImages = myNew.listPhotoAttachmentImageURL.count
+        default:
+            return cell
+        }
+
+        if countImages == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCell", for: indexPath) as! MyNewsTableViewCell
             cell.setup(new: myNew)
             return cell
         }
-        else if myNew.listPhotoImageURL.count == 1 {
+        else if countImages == 1 {
            let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForOnePhoto", for: indexPath) as! MyNewsTableViewCellForOnePhoto
             cell.setup(new: myNew)
             return cell
-        } else if myNew.listPhotoImageURL.count == 2  {
+        } else if countImages == 2  {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForTwoPhotos", for: indexPath) as! MyNewsTableViewCellForTwoPhotos
             cell.setup(new: myNew)
             return cell
-        } else if myNew.listPhotoImageURL.count == 3 {
+        } else if countImages == 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForThreePhotos", for: indexPath) as! MyNewsTableViewCellForThreePhotos
             cell.setup(new: myNew)
             return cell
-        } else if myNew.listPhotoImageURL.count > 3 {
+        } else if countImages > 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForFourPhotos", for: indexPath) as! MyNewsTableViewCellForFourPhotos
             cell.setup(new: myNew)
             return cell
         } else{
             return cell
         }
-
-        //return cell
     }
     
 

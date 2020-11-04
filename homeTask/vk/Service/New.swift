@@ -113,8 +113,8 @@ class VkApiNewItem: Object, Decodable {
             case "photo":
                 let photo = try? firstAttachmentsValues?.nestedContainer(keyedBy: PhotoKeys.self, forKey: .photo)
                 let photoImageURL = try? photo?.decode(String.self, forKey: .photo_604)
-                self.listPhotoImageURL.append(photoImageURL)
-
+                self.listPhotoAttachmentImageURL.append(photoImageURL)
+                //self.listPhotoImageURL.append(photoImageURL)
                 break
             default: break
             }
