@@ -34,7 +34,7 @@ class VkApiUsersItem: Object, Decodable {
         case first_name
         case last_name
         case city
-        case photo_200
+        case photo_100
     }
     enum CityKeys: String, CodingKey {
        // case id
@@ -47,9 +47,12 @@ class VkApiUsersItem: Object, Decodable {
         self.id = try values.decode(Int.self, forKey: .id)
         self.firstName = try values.decode(String.self, forKey: .first_name)
         self.lastName = try values.decode(String.self, forKey: .last_name)
-        self.avatarPhotoURL = try values.decode(String.self, forKey: .photo_200)
-        let cityValues = try values.nestedContainer(keyedBy: CityKeys.self, forKey: .city)
-        self.cityTitle = try cityValues.decode(String.self, forKey: .title)
+        self.avatarPhotoURL = try values.decode(String.self, forKey: .photo_100)
+        do{
+            let cityValues = try values.nestedContainer(keyedBy: CityKeys.self, forKey: .city)
+            self.cityTitle = try cityValues.decode(String.self, forKey: .title)
+        }
+        catch {self.cityTitle = ""}
         
         debugPrint("id = \(self.id),name = \(self.firstName) \(lastName),avatarPhotoURL = \(String(describing: self.avatarPhotoURL)), cityTitle = \(self.cityTitle)")
         

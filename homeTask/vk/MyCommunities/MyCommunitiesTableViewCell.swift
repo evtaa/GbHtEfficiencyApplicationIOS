@@ -11,8 +11,19 @@ import UIKit
 class MyCommunitiesTableViewCell: UITableViewCell {
     
     @IBOutlet weak var avatarView: AvatarCompositeView!
-    
     @IBOutlet weak var name: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        // Initialization code
+    }
+    
+    func setup (group: FirebaseGroup) {
+        name.text = group.name
+        avatarView.avatarPhoto.load(url: group.photoLargeURL)
+        avatarView.setup()
+    }
     
     //MARK: Animation
     
@@ -69,35 +80,10 @@ class MyCommunitiesTableViewCell: UITableViewCell {
                         self.avatarView.avatarPhoto.layer.cornerRadius -=  5
         })
     }
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        // Initialization code
-    }
-    
-    func setup (group: FirebaseGroup) {
-        name.text = group.name
-        avatarView.avatarPhoto.image  =  self.getUIImageFromURL(inputURL: group.photoLargeURL)
-        avatarView.setup()
-    }
-    
-    
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state
     }
-    
-    // MARK: CustomFunction
-    
-    func getUIImageFromURL ( inputURL: String) -> UIImage {
-        let url = URL(string: inputURL)
-            if let data = try? Data(contentsOf: url!)
-            {
-                return UIImage(data: data) ?? UIImage()
-            }
-        return  UIImage()
-    }
-    
 }

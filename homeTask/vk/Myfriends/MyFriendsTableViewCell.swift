@@ -13,6 +13,22 @@ class MyFriendsTableViewCell: UITableViewCell {
     @IBOutlet weak var avatarView: AvatarCompositeView!
     @IBOutlet weak var userName: UILabel!
     
+   
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+    
+    // MARK: Configure Cell
+    
+    func setup (user: VkApiUsersItem) {
+        
+        avatarView.avatarPhoto.load(url: user.avatarPhotoURL)
+        userName.text = user.lastName + " " + user.firstName
+        avatarView.setup()
+    }
+    
     // MARK: Animation
     
     @IBAction func downButtonTouchDown(_ sender: Any) {
@@ -71,34 +87,9 @@ class MyFriendsTableViewCell: UITableViewCell {
         
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state
-    }
-    
-    // MARK: CustomFunction
-    
-    func getUIImageFromURL ( inputURL: String) -> UIImage {
-        let url = URL(string: inputURL)
-            if let data = try? Data(contentsOf: url!)
-            {
-                return UIImage(data: data) ?? UIImage()
-            }
-        return  UIImage()
-    }
-    
-    // MARK: Configure Cell
-    
-    func setup (user: VkApiUsersItem) {
-        
-        avatarView.avatarPhoto.image  =  self.getUIImageFromURL(inputURL: user.avatarPhotoURL!)
-        userName.text = user.lastName + " " + user.firstName
-        avatarView.setup()
     }
 }

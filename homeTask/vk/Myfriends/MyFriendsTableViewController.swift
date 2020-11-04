@@ -96,31 +96,13 @@ class MyFriendsTableViewController: UITableViewController {
             case .initial (let results):
                 guard !results.isInvalidated else {return}
                 //let myFriends = [VkApiUsersItem](results)
-                var myFriends:[VkApiUsersItem] = [VkApiUsersItem] ()
-                for object in results {
-                    let friend: VkApiUsersItem = VkApiUsersItem ()
-                    friend.id = Int(object.id)
-                    friend.firstName = object.firstName
-                    friend.lastName = object.lastName
-                    friend.cityTitle =  object.cityTitle
-                    friend.avatarPhotoURL =  object.avatarPhotoURL
-                    myFriends.append(friend)
-                }
+                let myFriends = self.transRealmAnswerToArray (answer: results)
                 debugPrint(".initial : \(myFriends.count) myFriends loaded from DB")
                 completion(myFriends)
             case .update(let results, _, _, _):
                 guard !results.isInvalidated else {return}
                 //let myFriends = [VkApiUsersItem](results)
-                var myFriends:[VkApiUsersItem] = [VkApiUsersItem] ()
-                for object in results {
-                    let friend: VkApiUsersItem = VkApiUsersItem ()
-                    friend.id = Int(object.id)
-                    friend.firstName = object.firstName
-                    friend.lastName = object.lastName
-                    friend.cityTitle =  object.cityTitle
-                    friend.avatarPhotoURL =  object.avatarPhotoURL
-                    myFriends.append(friend)
-                }
+                let myFriends = self.transRealmAnswerToArray (answer: results)
                 debugPrint(".update : \(myFriends.count) myFriends loaded from DB")
                 completion(myFriends)
             case .error(let error):
@@ -128,6 +110,20 @@ class MyFriendsTableViewController: UITableViewController {
                 debugPrint(error)
             }
         }
+    }
+    
+    private func transRealmAnswerToArray (answer: Results<VkApiUsersItem>) -> [VkApiUsersItem]  {
+        var array:[VkApiUsersItem] = [VkApiUsersItem] ()
+        for object in answer {
+            let friend: VkApiUsersItem = VkApiUsersItem ()
+            friend.id = Int(object.id)
+            friend.firstName = object.firstName
+            friend.lastName = object.lastName
+            friend.cityTitle =  object.cityTitle
+            friend.avatarPhotoURL =  object.avatarPhotoURL
+            array.append(friend)
+        }
+        return array
     }
     
     func setDictionaryAndSectionTitlesOfMyFriends (searchText: String ) {

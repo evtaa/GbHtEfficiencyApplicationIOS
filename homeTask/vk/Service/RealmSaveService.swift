@@ -188,4 +188,43 @@ class RealmSaveService: SaveServiceInterface  {
         return groupList
     }
     
+    //MARK: Function for News
+    
+    // Saving of users to Realm
+    func saveNews (news: [VkApiNewItem]) {
+
+        do {
+            realm.beginWrite()
+            realm.add (news)
+            try realm.commitWrite()
+        }
+        catch {
+            debugPrint (error)
+        }
+    }
+    
+    // Uploading of users to Realm by primaryKey
+    func updateNews (news: [VkApiNewItem]) {
+        do {
+            let deletingNews = realm.objects(VkApiNewItem.self)
+            realm.beginWrite()
+            realm.delete(deletingNews)
+            realm.add (news)
+            try realm.commitWrite()
+        }
+        catch {
+            debugPrint (error)
+        }
+    }
+    
+    func deleteNew (user: VkApiNewItem) {
+        
+    }
+    
+    // Loading of users to Realm
+    func readNewList () -> [VkApiUsersItem] {
+       
+        return []
+    }
+    
 }
