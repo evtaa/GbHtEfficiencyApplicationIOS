@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class MyNewsTableViewCellForThreePhotos: UITableViewCell {
     @IBOutlet weak var avatarShadow: UIView!
@@ -53,9 +54,19 @@ class MyNewsTableViewCellForThreePhotos: UITableViewCell {
         
         contentLabelNews.text = new.text
         
-        imageContentFirstView.load(url: new.listPhotoImageURL[0])
-        imageContentSecondView.load(url: new.listPhotoImageURL[1])
-        imageContentThirdView.load(url: new.listPhotoImageURL[2])
+        let type = new.type
+        var urlListPhoto = List<String?>()
+        switch type {
+        case "post":
+            urlListPhoto = new.listPhotoAttachmentImageURL
+        case "photo":
+            urlListPhoto = new.listPhotoImageURL
+        default:
+            break
+        }
+        imageContentFirstView.load(url: urlListPhoto[0])
+        imageContentSecondView.load(url: urlListPhoto[1])
+        imageContentThirdView.load(url: urlListPhoto[2])
 
         let userLike = new.userLikes != 0
         likeUIControl.likeButton.setTitle(userLike ? "❤" : "💜", for: .normal)

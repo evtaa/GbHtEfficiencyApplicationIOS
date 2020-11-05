@@ -73,22 +73,6 @@ class MyCommunitiesTableViewController: UITableViewController {
             self?.newRefreshControl.endRefreshing()
         })
     }
-    
-//    private func notificationChangingGroupsInFirebase () {
-//        //создаем наблюдатель изменений в ветке refBranchUsers
-//        firebaseSaveService.refBranchGroups.observe(.value, with: { [weak self] snapshot in
-//            var groups: [FirebaseGroup] = []
-//            for child in snapshot.children {
-//                        if let snapshot = child as? DataSnapshot,
-//                           let group = FirebaseGroup(snapshot: snapshot) {
-//                               groups.append(group)
-//                        }
-//                    }
-//            self?.myGroups = groups
-//            self?.tableView.reloadData()
-//            self?.newRefreshControl.endRefreshing()
-//        })
-//    }
 
     // MARK: - Table view data source
     
