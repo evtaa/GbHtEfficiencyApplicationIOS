@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class MyNewsTableViewCellForOnePhoto: UITableViewCell {
     
@@ -51,7 +52,18 @@ class MyNewsTableViewCellForOnePhoto: UITableViewCell {
         date.text = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(new.date)))
         
         contentLabelNews.text = new.text
-        imageContentView.load(url: new.listPhotoImageURL[0])
+        
+        let type = new.type
+        var urlListPhoto = List<String?>()
+        switch type {
+        case "post":
+            urlListPhoto = new.listPhotoAttachmentImageURL
+        case "photo":
+            urlListPhoto = new.listPhotoImageURL
+        default:
+            break
+        }
+        imageContentView.load(url: urlListPhoto[0])
         
         let userLike = new.userLikes != 0
         likeUIControl.likeButton.setTitle(userLike ? "❤" : "💜", for: .normal)

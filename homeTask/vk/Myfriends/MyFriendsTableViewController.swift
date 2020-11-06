@@ -69,7 +69,9 @@ class MyFriendsTableViewController: UITableViewController {
     }
     
     private func fetchFriendsData () {
-        vkService.loadFriendsData(userId: String(Session.instance.userId!))
+        DispatchQueue.global().async { [weak self] in
+            self?.vkService.loadFriendsData(userId: String(Session.instance.userId!))
+        }
     }
     
     // Функция уведомлений о изменениях в списке пользователей приложением

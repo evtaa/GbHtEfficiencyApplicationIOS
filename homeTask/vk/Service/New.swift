@@ -9,16 +9,25 @@
 import Foundation
 import RealmSwift
 
-class VkApiNewsResponse: Decodable {
-    let response: VkApiNewsResponseItems
+class VkApiNewsResponseItems: Decodable {
+    let response: VkApiNewsItems
+}
+class VkApiNewsItems: Decodable {
+    var items: [VkApiNewItem]
 }
 
-class VkApiNewsResponseItems: Decodable {
-    let items: [VkApiNewItem]
-    //let groups: [VkApiNewGroupItem]
+class VkApiNewsResponseGroups: Decodable {
+    let response: VkApiNewsGroups
+}
+class VkApiNewsGroups: Decodable {
+    let groups: [VkApiGroupItem]
+}
+
+class VkApiNewsResponseProfiles: Decodable {
+    let response: VkApiNewsProfiles
+}
+class VkApiNewsProfiles: Decodable {
     let profiles: [VkApiUsersItem]
-    let groups: [VkApiGroupItem] 
-    
 }
 
 class VkApiNewItem: Object, Decodable {
@@ -113,8 +122,8 @@ class VkApiNewItem: Object, Decodable {
             case "photo":
                 let photo = try? firstAttachmentsValues?.nestedContainer(keyedBy: PhotoKeys.self, forKey: .photo)
                 let photoImageURL = try? photo?.decode(String.self, forKey: .photo_604)
-                self.listPhotoImageURL.append(photoImageURL)
-
+                self.listPhotoAttachmentImageURL.append(photoImageURL)
+                //self.listPhotoImageURL.append(photoImageURL)
                 break
             default: break
             }
