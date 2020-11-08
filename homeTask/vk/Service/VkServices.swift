@@ -23,8 +23,6 @@ protocol SaveServiceInterface {
     func saveGroups (groups: [VkApiGroupItem])
     func updateGroups (groups: [VkApiGroupItem])
     func readGroupList () -> [VkApiGroupItem]
-    
-    
 }
 
 class VKService {
@@ -228,17 +226,32 @@ class VKService {
         }
     }
     
-    func loadNewsData(){
+    enum TypeNew: String {
+        case post
+        case photo
+    }
+    
+    func loadNewsData(typeNew: TypeNew ...){
+        var filters: String = ""
+        for item in typeNew {
+            switch item {
+            case .photo :
+                filters += item.rawValue + ","
+            case .post:
+                filters += item.rawValue + ","
+            }
+        }
+        
         let path = "/newsfeed.get"
         let parameters: Parameters = [
-            "filters": "post, photo",
+            "filters": filters,
             "return_banned": "0",
             //"start_time": "",
             //"end_time": "",
             //"max_photos": "",
             //"source_ids": "",
             // "start_from": nextFrom,
-            "count": "50",
+            "count": "10",
             //"fields": "",
             //"section": "",
             "v": "5.68",
@@ -251,43 +264,88 @@ class VKService {
         Alamofire.request(url, method: .get, parameters: parameters).responseData { [weak self] response in
             switch response.result{
             case .success(let data):
-                do {
-                    debugPrint (data)
-                    let  vkApiNewsResponse = try JSONDecoder().decode (VkApiNewsResponse.self, from: data)
-                    let VkApiNewsResponseItems = vkApiNewsResponse.response.items
-                    let VkApiNewsResponseProfiles = vkApiNewsResponse.response.profiles
-                    let VkApiNewsResponseGroups = vkApiNewsResponse.response.groups
-                    for object in VkApiNewsResponseItems {
+                debugPrint (data)
+                var VkApiItems: [VkApiNewItem] = []
+                var VkApiProfiles: [VkApiUsersItem] = []
+                var VkApiGroups: [VkApiGroupItem] = []
+                
+                let dispatchGroup = DispatchGroup ()
+                DispatchQueue.global().async (group: dispatchGroup) {
+                    //VkApiNewsResponseItems = vkApiNewsResponse.response.items
+                    do {
+                        VkApiItems = try JSONDecoder().decode (VkApiNewsResponseItems.self, from: data).response.items
+                    }
+                    catch DecodingError.dataCorrupted(let context) {
+                        debugPrint(DecodingError.dataCorrupted(context))
+                    }
+                    catch let error {
+                        debugPrint("Decoding's error \(url) for items")
+                        debugPrint(error)
+                        if let data = String(bytes: data, encoding: .utf8) {
+                            debugPrint(data)
+                        }
+                    }
+                }
+                DispatchQueue.global().async (group: dispatchGroup) {
+                    //VkApiNewsResponseProfiles = vkApiNewsResponse.response.profiles
+                    do {
+                        VkApiGroups = try JSONDecoder().decode (VkApiNewsResponseGroups.self, from: data).response.groups
+                    }
+                    catch DecodingError.dataCorrupted(let context) {
+                        debugPrint(DecodingError.dataCorrupted(context))
+                    }
+                    catch let error {
+                        debugPrint("Decoding's error \(url) for groups")
+                        debugPrint(error)
+                        if let data = String(bytes: data, encoding: .utf8) {
+                            debugPrint(data)
+                        }
+                    }
+                }
+                DispatchQueue.global().async (group: dispatchGroup) {
+                    //VkApiNewsResponseGroups = vkApiNewsResponse.response.groups
+                    do {
+                        VkApiProfiles = try JSONDecoder().decode (VkApiNewsResponseProfiles.self, from: data).response.profiles
+                    }
+                    catch DecodingError.dataCorrupted(let context) {
+                        debugPrint(DecodingError.dataCorrupted(context))
+                    }
+                    catch let error {
+                        debugPrint("Decoding's error \(url) for profiles")
+                        debugPrint(error)
+                        if let data = String(bytes: data, encoding: .utf8) {
+                            debugPrint(data)
+                        }
+                    }
+                }
+                dispatchGroup.notify(queue: DispatchQueue.main) {
+                    for object in VkApiItems {
                         if object.sourceId > 0 {
-                            let profile = VkApiNewsResponseProfiles.filter({$0.id == object.sourceId}).first
-                            object.avatarImageURL = profile?.avatarPhotoURL ?? ""
-                            object.nameGroupOrUser = (profile?.firstName ?? "") + " " + (profile?.lastName ?? "")
+                            let profile = VkApiProfiles.filter({$0.id == object.sourceId}).first
+                            guard let imageURL = profile?.avatarPhotoURL else {return}
+                            object.avatarImageURL = imageURL
+                            guard let firstName = profile?.firstName,
+                                  let lastName = profile?.lastName
+                            else {return}
+                            object.nameGroupOrUser = (firstName) + " " + (lastName)
                         }
                         else {
-                            let group = VkApiNewsResponseGroups.filter({$0.id == abs(object.sourceId)}).first
-                            object.avatarImageURL = group?.photoMediumURL ?? ""
-                            object.nameGroupOrUser = group?.name ?? ""
+                            let group = VkApiGroups.filter({$0.id == abs(object.sourceId)}).first
+                            guard let imageURL = group?.photoMediumURL else {return}
+                            object.avatarImageURL = imageURL
+                            guard let name = group?.name else {return}
+                            object.nameGroupOrUser = name
                         }
                     }
                     // Save user array to Database
                     // Working with Realm
-                    self?.realmSaveService.updateNews(news: VkApiNewsResponseItems)
-                    debugPrint (data)
-                }
-                catch DecodingError.dataCorrupted(let context) {
-                    debugPrint(DecodingError.dataCorrupted(context))
-                }
-                catch let error {
-                    debugPrint("Decoding's error \(url)")
-                    debugPrint(error)
-                    debugPrint(String(bytes: data, encoding: .utf8) ?? "")
+                    self?.realmSaveService.updateNews(news: VkApiItems)
                 }
             case .failure(let error):
                 debugPrint(error)
             }
         }
     }
-    
 }
 
 

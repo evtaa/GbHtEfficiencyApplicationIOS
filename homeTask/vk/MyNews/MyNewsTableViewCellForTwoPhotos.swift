@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class MyNewsTableViewCellForTwoPhotos: UITableViewCell {
     @IBOutlet weak var avatarShadow: UIView!
@@ -51,9 +52,18 @@ class MyNewsTableViewCellForTwoPhotos: UITableViewCell {
         date.text = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(new.date)))
         
         contentLabelNews.text = new.text
-        
-        imageContentFirstView.load(url: new.listPhotoImageURL[0])
-        imageContentSecondView.load(url: new.listPhotoImageURL[1])
+        let type = new.type
+        var urlListPhoto = List<String?>()
+        switch type {
+        case "post":
+            urlListPhoto = new.listPhotoAttachmentImageURL
+        case "photo":
+            urlListPhoto = new.listPhotoImageURL
+        default:
+            break
+        }
+        imageContentFirstView.load(url: urlListPhoto[0])
+        imageContentSecondView.load(url: urlListPhoto[1])
 
         let userLike = new.userLikes != 0
         likeUIControl.likeButton.setTitle(userLike ? "❤" : "💜", for: .normal)

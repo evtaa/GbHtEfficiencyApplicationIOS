@@ -63,9 +63,10 @@ class PhotosMyFriendCollectionViewController: UICollectionViewController {
     }
     
     private func fetchPhotosData () {
-        guard let friendSelectedId = friendSelected?.id else {return}
-        vkService.loadPhotosData(userId: friendSelectedId)
-        
+        DispatchQueue.global().async { [weak self] in
+            guard let friendSelectedId = self?.friendSelected?.id else {return}
+            self?.vkService.loadPhotosData(userId: friendSelectedId)
+        }
     }
     
     // MARK: Pair Table and Realm

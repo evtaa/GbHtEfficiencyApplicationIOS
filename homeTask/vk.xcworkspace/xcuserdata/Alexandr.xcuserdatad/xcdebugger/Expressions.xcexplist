@@ -3,10 +3,21 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "MyNewsTableViewCellForThreePhotos.setup(new:):MyNewsTableViewCellForThreePhotos.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "urlListPhoto">
+            </PersistentString>
+            <PersistentString
+               value = "new.listPhotoAttachmentImageURL">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "GLOBAL">
          <PersistentStrings>
             <PersistentString
-               value = "object.avatarImageURL">
+               value = "myNew.listPhotoImageURL.count">
             </PersistentString>
             <PersistentString
                value = "group?.photoMediumURL">
@@ -34,10 +45,10 @@
          contextName = "closure #1 in VKService.loadNewsData():VkServices.swift">
          <PersistentStrings>
             <PersistentString
-               value = "VkApiNewsResponseItems[1].avatarImageURL">
+               value = "VkApiNewsResponseItems[0].avatarImageURL">
             </PersistentString>
             <PersistentString
-               value = "VkApiNewsResponseItems[0].avatarImageURL">
+               value = "VkApiNewsResponseItems[1].avatarImageURL">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -103,6 +114,17 @@
             </PersistentString>
             <PersistentString
                value = "myNews">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "MyNewsTableViewController.tableView(_:cellForRowAt:):MyNewsTableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "countImages">
+            </PersistentString>
+            <PersistentString
+               value = "myNew.listPhotoAttachmentImageURL.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
