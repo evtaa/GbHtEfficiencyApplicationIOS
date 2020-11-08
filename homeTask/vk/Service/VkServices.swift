@@ -60,7 +60,7 @@ class VKService {
         // составляем URL из базового адреса сервиса и конкретного метода
         let url = baseUrl+path
         // делаем запрос
-        Alamofire.request(url, method: .get, parameters: parameters).responseData { [weak self] response in
+            Alamofire.request(url, method: .get, parameters: parameters).responseData { [weak self] response in
             switch response.result{
             case .success(let data):
                 do {
@@ -137,7 +137,7 @@ class VKService {
     
     // Функция получения списка групп  пользователя
     func loadGroupsData (userId: Int) {
-        
+        let myOwnQueue = OperationQueue ()
         let path = "/groups.get"
         let parameters: Parameters = [
             "user_id": String(userId),
@@ -153,34 +153,18 @@ class VKService {
         // составляем URL из базового адреса сервиса и конкретного метода
         let url = baseUrl+path
         // делаем запрос
-        Alamofire.request(url, method: .get, parameters: parameters).responseData { [weak self] response in
-            switch response.result{
-            case .success(let data):
-                do {
-                    let  vkApiGroupResponse = try JSONDecoder().decode (VkApiGroupResponse.self, from: data)
-                    let VkApiGroupsResponseItems = vkApiGroupResponse.response.items
-                    
-                    // Save group array to Database
-                    //                    // Working with Realm
-                    //                    self?.realmSaveService.updateGroups(groups:VkApiGroupsResponseItems)
-                    
-                    // Working with Firebase
-                    self?.firebaseSaveService.updateGroups(groups: VkApiGroupsResponseItems)
-                    
-                    debugPrint (data)
-                }
-                catch DecodingError.dataCorrupted(let context) {
-                    debugPrint(DecodingError.dataCorrupted(context))
-                }
-                catch let error {
-                    debugPrint("Decoding's error \(url)")
-                    debugPrint(error)
-                    debugPrint(String(bytes: data, encoding: .utf8) ?? "")
-                }
-            case .failure(let error):
-                debugPrint(error)
-            }
-        }
+        let request =  Alamofire.request(url, method: .get, parameters: parameters)
+        
+        let getDataOperation = GetDataOperation (request: request)
+        myOwnQueue.addOperation(getDataOperation)
+        
+        let parseData = ParseData ()
+        parseData.addDependency(getDataOperation)
+        myOwnQueue.addOperation(parseData)
+        
+        let saveDataToRealm = SaveDataToRealm ()
+        saveDataToRealm.addDependency(parseData)
+        OperationQueue.main.addOperation (saveDataToRealm)
     }
     
     // Получения списка групп по заданной подстроке
