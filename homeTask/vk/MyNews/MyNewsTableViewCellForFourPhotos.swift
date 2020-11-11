@@ -67,10 +67,22 @@ class MyNewsTableViewCellForFourPhotos: UITableViewCell {
         default:
             break
         }
-        imageContentFirstView.load(url: urlListPhoto[0])
-        imageContentSecondView.load(url: urlListPhoto[1])
-        imageContentThirdView.load(url: urlListPhoto[2])
-        imageContentFourthView.load(url: urlListPhoto[3])
+        
+        var i = 0
+        for object in urlListPhoto {
+            if i==0 {
+                imageContentFirstView.load(url: object)
+            } else if i == 1 {
+                imageContentSecondView.load(url: object)
+            } else if i == 2 {
+                imageContentThirdView.load(url: object)
+            } else if i == 3 {
+                imageContentFourthView.load(url: object)
+            } else {
+                break
+            }
+            i+=1
+        }
         
         if new.listPhotoImageURL.count > 4 {
             countNotViewedPhotos.text = "+\(new.listPhotoImageURL.count - 4)"

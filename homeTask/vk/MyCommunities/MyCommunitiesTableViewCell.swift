@@ -19,7 +19,7 @@ class MyCommunitiesTableViewCell: UITableViewCell {
         // Initialization code
     }
     
-    func setup (group: FirebaseGroup) {
+    func setup (group: VkApiGroupItem) {
         name.text = group.name
         avatarView.avatarPhoto.load(url: group.photoLargeURL)
         avatarView.setup()

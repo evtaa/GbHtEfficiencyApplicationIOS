@@ -63,7 +63,16 @@ class MyNewsTableViewCellForOnePhoto: UITableViewCell {
         default:
             break
         }
-        imageContentView.load(url: urlListPhoto[0])
+        
+        var i = 0
+        for object in urlListPhoto {
+            if i==0 {
+                imageContentView.load(url: object)
+            } else {
+                break
+            }
+            i+=1
+        }
         
         let userLike = new.userLikes != 0
         likeUIControl.likeButton.setTitle(userLike ? "❤" : "💜", for: .normal)

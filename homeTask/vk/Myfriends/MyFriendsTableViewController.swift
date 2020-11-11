@@ -70,7 +70,9 @@ class MyFriendsTableViewController: UITableViewController {
     
     private func fetchFriendsData () {
         DispatchQueue.global().async { [weak self] in
-            self?.vkService.loadFriendsData(userId: String(Session.instance.userId!))
+            if let userID = Session.instance.userId {
+                self?.vkService.loadFriendsData(userId: String(userID))
+            }
         }
     }
     

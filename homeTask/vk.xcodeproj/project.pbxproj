@@ -31,6 +31,10 @@
 		A867C866252B1E2100A75D7A /* GroupDB+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A867C864252B1E2100A75D7A /* GroupDB+CoreDataClass.swift */; };
 		A867C867252B1E2100A75D7A /* GroupDB+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A867C865252B1E2100A75D7A /* GroupDB+CoreDataProperties.swift */; };
 		A88CBEF62507CCD600D4FA6B /* PhotosMyFriendsSwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88CBEF52507CCD600D4FA6B /* PhotosMyFriendsSwipeViewController.swift */; };
+		A89D5309255825C8001D4676 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89D5308255825C8001D4676 /* AsyncOperation.swift */; };
+		A89D530E2558268A001D4676 /* GetDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89D530D2558268A001D4676 /* GetDataOperation.swift */; };
+		A89D5313255846F5001D4676 /* ParseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89D5312255846F5001D4676 /* ParseData.swift */; };
+		A89D532C25584D01001D4676 /* SaveDataToRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89D532B25584D01001D4676 /* SaveDataToRealm.swift */; };
 		A8AEB046252119BB009E3780 /* LoginVkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8AEB045252119BB009E3780 /* LoginVkController.swift */; };
 		A8AEB04925211A78009E3780 /* VkServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8AEB04825211A78009E3780 /* VkServices.swift */; };
 		A8AEB04B25211BDE009E3780 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8AEB04A25211BDE009E3780 /* WebKit.framework */; };
@@ -117,6 +121,10 @@
 		A867C864252B1E2100A75D7A /* GroupDB+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupDB+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A867C865252B1E2100A75D7A /* GroupDB+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupDB+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A88CBEF52507CCD600D4FA6B /* PhotosMyFriendsSwipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosMyFriendsSwipeViewController.swift; sourceTree = "<group>"; };
+		A89D5308255825C8001D4676 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
+		A89D530D2558268A001D4676 /* GetDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDataOperation.swift; sourceTree = "<group>"; };
+		A89D5312255846F5001D4676 /* ParseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseData.swift; sourceTree = "<group>"; };
+		A89D532B25584D01001D4676 /* SaveDataToRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveDataToRealm.swift; sourceTree = "<group>"; };
 		A8AEB045252119BB009E3780 /* LoginVkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVkController.swift; sourceTree = "<group>"; };
 		A8AEB04825211A78009E3780 /* VkServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkServices.swift; sourceTree = "<group>"; };
 		A8AEB04A25211BDE009E3780 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -266,6 +274,17 @@
 			path = GroupDB;
 			sourceTree = "<group>";
 		};
+		A89D5304255824DD001D4676 /* Operation */ = {
+			isa = PBXGroup;
+			children = (
+				A89D5308255825C8001D4676 /* AsyncOperation.swift */,
+				A89D530D2558268A001D4676 /* GetDataOperation.swift */,
+				A89D5312255846F5001D4676 /* ParseData.swift */,
+				A89D532B25584D01001D4676 /* SaveDataToRealm.swift */,
+			);
+			path = Operation;
+			sourceTree = "<group>";
+		};
 		A8AEB047252119EE009E3780 /* Session */ = {
 			isa = PBXGroup;
 			children = (
@@ -298,6 +317,7 @@
 			children = (
 				A8BF596F24DD723B00C9833E /* MyCommunitiesTableViewController.swift */,
 				A8BF596D24DD722800C9833E /* MyCommunitiesTableViewCell.swift */,
+				A89D5304255824DD001D4676 /* Operation */,
 			);
 			path = MyCommunities;
 			sourceTree = "<group>";
@@ -711,6 +731,8 @@
 				A8C9732A24F7C168008F529D /* LikeUIControl.swift in Sources */,
 				A8EB8E0B24FFD89B00C3DCA6 /* MyNewsTableViewController.swift in Sources */,
 				A867C867252B1E2100A75D7A /* GroupDB+CoreDataProperties.swift in Sources */,
+				A89D5309255825C8001D4676 /* AsyncOperation.swift in Sources */,
+				A89D5313255846F5001D4676 /* ParseData.swift in Sources */,
 				A818A0A9252605F900E10A8A /* User.swift in Sources */,
 				A850D4EF254DE65200B8719D /* MyNewsTableViewCellForTwoPhotos.swift in Sources */,
 				A8CB045124F65C9A0006C483 /* AvatarCompositeView.swift in Sources */,
@@ -734,6 +756,7 @@
 				A83E4C95253C3F3600E81A8F /* FirebaseGroup.swift in Sources */,
 				A8CD3F0224D2F6F400253484 /* AppDelegate.swift in Sources */,
 				A8BF596B24DD6BA700C9833E /* AllCommunitiesTableViewCell.swift in Sources */,
+				A89D532C25584D01001D4676 /* SaveDataToRealm.swift in Sources */,
 				A8BF596E24DD722800C9833E /* MyCommunitiesTableViewCell.swift in Sources */,
 				A8BF597024DD723B00C9833E /* MyCommunitiesTableViewController.swift in Sources */,
 				A8C51BC3252A68EC00AC0812 /* PhotoDB+CoreDataClass.swift in Sources */,
@@ -741,6 +764,7 @@
 				A8BF595D24DD4D7500C9833E /* PhotosMyFriendCollectionViewCell.swift in Sources */,
 				A8BF596924DD6B8D00C9833E /* AllCommunitiesTableViewController.swift in Sources */,
 				A8CD3F0424D2F6F400253484 /* SceneDelegate.swift in Sources */,
+				A89D530E2558268A001D4676 /* GetDataOperation.swift in Sources */,
 				A8FEEAFB24DC6DAA008D2B8D /* MyFriendsTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
