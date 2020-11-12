@@ -1,65 +1,75 @@
 PODS:
   - Alamofire (4.9.1)
-  - Firebase/Auth (6.34.0):
+  - Firebase/Auth (7.1.0):
     - Firebase/CoreOnly
-    - FirebaseAuth (~> 6.9.2)
-  - Firebase/CoreOnly (6.34.0):
-    - FirebaseCore (= 6.10.4)
-  - Firebase/Database (6.34.0):
+    - FirebaseAuth (~> 7.1.0)
+  - Firebase/CoreOnly (7.1.0):
+    - FirebaseCore (= 7.1.0)
+  - Firebase/Database (7.1.0):
     - Firebase/CoreOnly
-    - FirebaseDatabase (~> 6.6.0)
-  - FirebaseAuth (6.9.2):
-    - FirebaseCore (~> 6.10)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.7)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseCore (6.10.4):
-    - FirebaseCoreDiagnostics (~> 1.6)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/Logger (~> 6.7)
-  - FirebaseCoreDiagnostics (1.7.0):
-    - GoogleDataTransport (~> 7.4)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/Logger (~> 6.7)
-    - nanopb (~> 1.30906.0)
-  - FirebaseDatabase (6.6.0):
-    - FirebaseCore (~> 6.10)
+    - FirebaseDatabase (~> 7.1.0)
+  - FirebaseAuth (7.1.0):
+    - FirebaseCore (~> 7.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GTMSessionFetcher/Core (~> 1.4)
+  - FirebaseCore (7.1.0):
+    - FirebaseCoreDiagnostics (~> 7.0)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GoogleUtilities/Logger (~> 7.0)
+  - FirebaseCoreDiagnostics (7.1.0):
+    - GoogleDataTransport (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GoogleUtilities/Logger (~> 7.0)
+    - nanopb (~> 2.30906.0)
+  - FirebaseDatabase (7.1.0):
+    - FirebaseCore (~> 7.0)
     - leveldb-library (~> 1.22)
-  - GoogleDataTransport (7.5.1):
-    - nanopb (~> 1.30906.0)
-  - GoogleUtilities/AppDelegateSwizzler (6.7.2):
+  - GoogleDataTransport (8.0.1):
+    - nanopb (~> 2.30906.0)
+  - GoogleUtilities/AppDelegateSwizzler (7.1.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (6.7.2):
+  - GoogleUtilities/Environment (7.1.0):
     - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Logger (6.7.2):
+  - GoogleUtilities/Logger (7.1.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/Network (6.7.2):
+  - GoogleUtilities/Network (7.1.0):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (6.7.2)"
-  - GoogleUtilities/Reachability (6.7.2):
+  - "GoogleUtilities/NSData+zlib (7.1.0)"
+  - GoogleUtilities/Reachability (7.1.0):
     - GoogleUtilities/Logger
-  - GTMSessionFetcher/Core (1.4.0)
+  - GTMSessionFetcher/Core (1.5.0)
   - leveldb-library (1.22)
-  - nanopb (1.30906.0):
-    - nanopb/decode (= 1.30906.0)
-    - nanopb/encode (= 1.30906.0)
-  - nanopb/decode (1.30906.0)
-  - nanopb/encode (1.30906.0)
+  - nanopb (2.30906.0):
+    - nanopb/decode (= 2.30906.0)
+    - nanopb/encode (= 2.30906.0)
+  - nanopb/decode (2.30906.0)
+  - nanopb/encode (2.30906.0)
+  - PromiseKit (6.13.1):
+    - PromiseKit/CorePromise (= 6.13.1)
+    - PromiseKit/Foundation (= 6.13.1)
+    - PromiseKit/UIKit (= 6.13.1)
+  - PromiseKit/CorePromise (6.13.1)
+  - PromiseKit/Foundation (6.13.1):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (6.13.1):
+    - PromiseKit/CorePromise
   - PromisesObjC (1.2.11)
-  - Realm (5.4.8):
-    - Realm/Headers (= 5.4.8)
-  - Realm/Headers (5.4.8)
-  - RealmSwift (5.4.8):
-    - Realm (= 5.4.8)
+  - Realm (10.1.2):
+    - Realm/Headers (= 10.1.2)
+  - Realm/Headers (10.1.2)
+  - RealmSwift (10.1.2):
+    - Realm (= 10.1.2)
 
 DEPENDENCIES:
   - Alamofire (~> 4.8)
   - Firebase/Auth
   - Firebase/Database
+  - PromiseKit
   - RealmSwift
 
 SPEC REPOS:
@@ -75,26 +85,28 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
+    - PromiseKit
     - PromisesObjC
     - Realm
     - RealmSwift
 
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
-  Firebase: c23a36d9e4cdf7877dfcba8dd0c58add66358999
-  FirebaseAuth: c92d49ada7948d1a23466e3db17bc4c2039dddc3
-  FirebaseCore: d3a978a3cfa3240bf7e4ba7d137fdf5b22b628ec
-  FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
-  FirebaseDatabase: 13a865a4b85897462b930eb683bda8f52583713f
-  GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
-  GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
-  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
+  Firebase: 78e8dd2e39d653de6270432ad84fe8b59f7bf4e8
+  FirebaseAuth: f82c2cfcc1c107bb0a97735cdbce4eb2a601f710
+  FirebaseCore: 20046127eef0fcb8fa25df7fc12f7b97d4e48611
+  FirebaseCoreDiagnostics: 872cdb9b749b23346dddd5c1014d1babd2257de3
+  FirebaseDatabase: bf02ea57590aaab4e72b9b12b412a4c881ee81e2
+  GoogleDataTransport: e4085e6762f36a6141738f46b0153473ce57fb18
+  GoogleUtilities: f734da554aade8cc7928a31c2f3311897933a1bd
+  GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
-  nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
+  nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
+  PromiseKit: 28fda91c973cc377875d8c0ea4f973013c05b6db
   PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
-  Realm: 042bbb59227a0159eda397b8a5a49fbd67495ce7
-  RealmSwift: 15ddd6b3398ebfc99810811c44f095df1313adb3
+  Realm: 031fdd4be7094d01b43af1a5e49766ab644bb800
+  RealmSwift: 43cf2e114baa9d17d34eb81e7d0def31f21cd444
 
-PODFILE CHECKSUM: dd6bea1d07f465f3a0eb47b21d42b8e3a6a04264
+PODFILE CHECKSUM: 60ade95bb5579ba7d9bf9d44d4a89ea918cdcad6
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0

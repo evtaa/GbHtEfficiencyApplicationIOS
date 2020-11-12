@@ -64,14 +64,14 @@ class MyNewsTableViewCellForOnePhoto: UITableViewCell {
             break
         }
         
-        var i = 0
-        for object in urlListPhoto {
-            if i==0 {
+        for (index,object) in urlListPhoto.enumerated() {
+            guard let object = object else { break }
+            if index == 0 {
                 imageContentView.load(url: object)
-            } else {
+            }
+            if index >= 0 {
                 break
             }
-            i+=1
         }
         
         let userLike = new.userLikes != 0

@@ -10,6 +10,7 @@ import UIKit
 import RealmSwift
 import Realm
 import FirebaseDatabase
+import PromiseKit
 
 class MyFriendsTableViewController: UITableViewController {
     
@@ -69,9 +70,12 @@ class MyFriendsTableViewController: UITableViewController {
     }
     
     private func fetchFriendsData () {
-        DispatchQueue.global().async { [weak self] in
-            if let userID = Session.instance.userId {
-                self?.vkService.loadFriendsData(userId: String(userID))
+        
+        if let userID = Session.instance.userId {
+            self.vkService.loadFriendsData(userId: String(userID)).get { [weak self] users in
+                // Обрабатываем ответ сетевого запроса
+                guard let self = self else { return }
+                self.vkService.realmSaveService.updateUsers(users: users)
             }
         }
     }
