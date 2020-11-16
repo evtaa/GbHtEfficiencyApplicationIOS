@@ -178,7 +178,7 @@ class MyFriendsTableViewController: UITableViewController {
         let myFriendNameKey = myFriendNameSectionTitles [indexPath.section]
         if let myFriendValue = myFriendsDictionary [myFriendNameKey] {
             let user = myFriendValue [indexPath.row]
-            cell.setup(user: user)
+            cell.setup(user: user, tableView: self.tableView, indexPath: indexPath)
         }
         return cell
     }

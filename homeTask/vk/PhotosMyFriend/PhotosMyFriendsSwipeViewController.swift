@@ -12,7 +12,6 @@ import RealmSwift
 class PhotosMyFriendsSwipeViewController: UIViewController {
     
     var friendSelected : VkApiUsersItem?
-    //var photosFriend = List<VkApiPhotoItem>()
     var photosFriend : [VkApiPhotoItem?]?
     var indexImage : Int = 0
     

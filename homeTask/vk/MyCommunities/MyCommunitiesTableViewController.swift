@@ -27,7 +27,7 @@ class MyCommunitiesTableViewController: UITableViewController {
             guard let tableView = self?.tableView else { return }
             self?.myGroups = myGroups
             tableView.reloadData()
-            self?.newRefreshControl.endRefreshing()
+ //           self?.newRefreshControl.endRefreshing()
         }
     }
     
@@ -58,6 +58,7 @@ class MyCommunitiesTableViewController: UITableViewController {
     private func fetchGroupsData () {
         if let userID = Session.instance.userId {
             vkService.loadGroupsData(userId: userID)
+            self.newRefreshControl.endRefreshing()
         }
     }
     
@@ -118,8 +119,7 @@ class MyCommunitiesTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyCommunitiesCell", for: indexPath) as! MyCommunitiesTableViewCell
         
         guard let myGroup  = self.myGroups? [indexPath.row] else { return cell }
-        cell.setup(group: myGroup)
-        
+        cell.setup(group: myGroup, tableView: self.tableView, indexPath: indexPath)
         return cell
     }
     

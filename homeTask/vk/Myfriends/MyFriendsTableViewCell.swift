@@ -12,7 +12,7 @@ class MyFriendsTableViewCell: UITableViewCell {
     
     @IBOutlet weak var avatarView: AvatarCompositeView!
     @IBOutlet weak var userName: UILabel!
-    
+    var photoService: PhotoService?
    
     
     override func awakeFromNib() {
@@ -22,9 +22,12 @@ class MyFriendsTableViewCell: UITableViewCell {
     
     // MARK: Configure Cell
     
-    func setup (user: VkApiUsersItem) {
-        
-        avatarView.avatarPhoto.load(url: user.avatarPhotoURL)
+    func setup (user: VkApiUsersItem, tableView: UITableView?, indexPath: IndexPath) {
+        if let tableView = tableView,
+           let avatarPhotoURL = user.avatarPhotoURL {
+            photoService = PhotoService(container: tableView)
+            avatarView.avatarPhoto.image = photoService?.photo(atIndexpath: indexPath, byUrl: avatarPhotoURL)
+        }
         userName.text = user.lastName + " " + user.firstName
         avatarView.setup()
     }

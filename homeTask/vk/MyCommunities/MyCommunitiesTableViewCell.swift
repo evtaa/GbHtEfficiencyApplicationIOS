@@ -12,6 +12,7 @@ class MyCommunitiesTableViewCell: UITableViewCell {
     
     @IBOutlet weak var avatarView: AvatarCompositeView!
     @IBOutlet weak var name: UILabel!
+    var photoService: PhotoService?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -19,9 +20,12 @@ class MyCommunitiesTableViewCell: UITableViewCell {
         // Initialization code
     }
     
-    func setup (group: VkApiGroupItem) {
+    func setup (group: VkApiGroupItem, tableView: UITableView?, indexPath: IndexPath) {
+        if let tableView = tableView {
+            photoService = PhotoService(container: tableView)
+            avatarView.avatarPhoto.image = photoService?.photo(atIndexpath: indexPath, byUrl: group.photoLargeURL)
+        }
         name.text = group.name
-        avatarView.avatarPhoto.load(url: group.photoLargeURL)
         avatarView.setup()
     }
     

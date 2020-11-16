@@ -147,6 +147,7 @@ class VKService {
     // Функция получения списка групп  пользователя
     func loadGroupsData (userId: Int) {
         let myOwnQueue = OperationQueue ()
+        
         let path = "/groups.get"
         let parameters: Parameters = [
             "user_id": String(userId),
@@ -162,15 +163,16 @@ class VKService {
         // составляем URL из базового адреса сервиса и конкретного метода
         let url = baseUrl+path
         // делаем запрос
+                
         let request =  Alamofire.request(url, method: .get, parameters: parameters)
-        
+
         let getDataOperation = GetDataOperation (request: request)
         myOwnQueue.addOperation(getDataOperation)
-        
+
         let parseDataOperation = ParseDataOperation ()
         parseDataOperation.addDependency(getDataOperation)
         myOwnQueue.addOperation(parseDataOperation)
-        
+
         let saveDataToRealmOperation = SaveDataToRealmOperation ()
         saveDataToRealmOperation.addDependency(parseDataOperation)
         OperationQueue.main.addOperation (saveDataToRealmOperation)

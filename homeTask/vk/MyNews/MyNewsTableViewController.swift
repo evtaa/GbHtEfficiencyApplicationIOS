@@ -148,24 +148,24 @@ class MyNewsTableViewController: UITableViewController {
 
         if countImages == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCell", for: indexPath) as! MyNewsTableViewCell
-            cell.setup(new: myNew)
+            cell.setup(new: myNew, tableView: self.tableView, indexPath: indexPath)
             return cell
         }
         else if countImages == 1 {
            let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForOnePhoto", for: indexPath) as! MyNewsTableViewCellForOnePhoto
-            cell.setup(new: myNew)
+            cell.setup(new: myNew, tableView: self.tableView, indexPath: indexPath)
             return cell
         } else if countImages == 2  {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForTwoPhotos", for: indexPath) as! MyNewsTableViewCellForTwoPhotos
-            cell.setup(new: myNew)
+            cell.setup(new: myNew, tableView: self.tableView, indexPath: indexPath)
             return cell
         } else if countImages == 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForThreePhotos", for: indexPath) as! MyNewsTableViewCellForThreePhotos
-            cell.setup(new: myNew)
+            cell.setup(new: myNew, tableView: self.tableView, indexPath: indexPath)
             return cell
         } else if countImages > 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForFourPhotos", for: indexPath) as! MyNewsTableViewCellForFourPhotos
-            cell.setup(new: myNew)
+            cell.setup(new: myNew, tableView: self.tableView, indexPath: indexPath)
             return cell
         } else{
             return cell

@@ -129,11 +129,8 @@ class PhotosMyFriendCollectionViewController: UICollectionViewController {
         //Получаем ячейку из пула
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoSelectedFriend", for: indexPath) as! PhotosMyFriendCollectionViewCell
         
-        let numberOfItems = self.collectionView.numberOfItems(inSection: 0)
         guard let photoFriend  = self.photosFriend [indexPath.row] else {return cell}
-        guard indexPath.row <= numberOfItems else {return cell}
-        cell.setup(photoFriend: photoFriend)
-        
+        cell.setup (photoFriend: photoFriend, collectionView: self.collectionView, indexPath: indexPath)
         return cell
         
         // Configure the cell
