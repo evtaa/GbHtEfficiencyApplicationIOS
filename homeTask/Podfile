@@ -9,6 +9,8 @@ target 'vk' do
 
    pod 'Alamofire', '~> 4.8'
    pod 'RealmSwift'
+   pod 'PromiseKit' 
+
    
    # add pods for desired Firebase products
    # https://firebase.google.com/docs/ios/setup#available-pods

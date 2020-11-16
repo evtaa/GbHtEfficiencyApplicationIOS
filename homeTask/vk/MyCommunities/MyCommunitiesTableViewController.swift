@@ -12,7 +12,6 @@ import RealmSwift
 class MyCommunitiesTableViewController: UITableViewController {
     
     internal let newRefreshControl = UIRefreshControl()
-    //var myGroups: Results <VkApiGroupItem>?
     var myGroups: [VkApiGroupItem]?
     let vkService = VKService ()
     var token: NotificationToken?
@@ -66,39 +65,17 @@ class MyCommunitiesTableViewController: UITableViewController {
             guard let realm = try? Realm() else { return }
         let objects = realm.objects(VkApiGroupItem.self)
         token = objects.observe { (changes: RealmCollectionChange) in
-               // guard let tableView = self?.tableView else { return }
                 switch changes {
                 case .initial (let results):
                     guard !results.isInvalidated else {return}
                     //let myGroups = [VkApiGroupItem](results)
-                    var myGroups:[VkApiGroupItem] = [VkApiGroupItem] ()
-                    for object in results {
-                        let group: VkApiGroupItem = VkApiGroupItem ()
-                        group.id = Int(object.id)
-                        group.name = object.name
-                        group.screenName = object.screenName
-                        group.photoSmallURL =  object.photoSmallURL
-                        group.photoMediumURL =  object.photoMediumURL
-                        group.photoLargeURL =  object.photoLargeURL
-                        myGroups.append(group)
-                    }
-                    
+                    let myGroups:[VkApiGroupItem] = self.transRealmAnswerToArray(answer: results)
                     debugPrint(".initial : \(myGroups.count) myFriends loaded from DB")
                     completion(myGroups)
                 case .update (let results, _, _, _):
                     guard !results.isInvalidated else {return}
                     //let myGroups = [VkApiGroupItem](results)
-                    var myGroups:[VkApiGroupItem] = [VkApiGroupItem] ()
-                    for object in results {
-                        let group: VkApiGroupItem = VkApiGroupItem ()
-                        group.id = Int(object.id)
-                        group.name = object.name
-                        group.screenName = object.screenName
-                        group.photoSmallURL =  object.photoSmallURL
-                        group.photoMediumURL =  object.photoMediumURL
-                        group.photoLargeURL =  object.photoLargeURL
-                        myGroups.append(group)
-                    }
+                    let myGroups:[VkApiGroupItem] = self.transRealmAnswerToArray(answer: results)
                     debugPrint(".initial : \(myGroups.count) myFriends loaded from DB")
                     completion(myGroups)
                 case .error(let error):
@@ -107,6 +84,20 @@ class MyCommunitiesTableViewController: UITableViewController {
             }
         }
 
+    private func transRealmAnswerToArray (answer: Results<VkApiGroupItem>) -> [VkApiGroupItem]  {
+        var array:[VkApiGroupItem] = [VkApiGroupItem] ()
+        for object in answer {
+            let group: VkApiGroupItem = VkApiGroupItem ()
+            group.id = Int(object.id)
+            group.name = object.name
+            group.screenName = object.screenName
+            group.photoSmallURL =  object.photoSmallURL
+            group.photoMediumURL =  object.photoMediumURL
+            group.photoLargeURL =  object.photoLargeURL
+            array.append(group)
+        }
+        return array
+    }
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -126,9 +117,7 @@ class MyCommunitiesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyCommunitiesCell", for: indexPath) as! MyCommunitiesTableViewCell
         
-        //let numberOfRows = self.tableView.numberOfRows(inSection: 0)
-        guard let myGroup  = self.myGroups? [indexPath.row] else {return cell}
-       // guard indexPath.row <= numberOfRows else {return cell}
+        guard let myGroup  = self.myGroups? [indexPath.row] else { return cell }
         cell.setup(group: myGroup)
         
         return cell
@@ -140,7 +129,7 @@ class MyCommunitiesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            guard let group = myGroups? [indexPath.row]  else {return}
+            guard let group = myGroups? [indexPath.row]  else { return }
             vkService.realmSaveService.deleteGroup(group: group)
         }
     }

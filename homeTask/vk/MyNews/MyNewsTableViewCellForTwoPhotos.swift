@@ -65,16 +65,19 @@ class MyNewsTableViewCellForTwoPhotos: UITableViewCell {
         imageContentFirstView.load(url: urlListPhoto[0])
         imageContentSecondView.load(url: urlListPhoto[1])
         
-        var i = 0
-        for object in urlListPhoto {
-            if i==0 {
-                imageContentFirstView.load(url: object)
-            } else if i == 1 {
-                imageContentSecondView.load(url: object)
-            } else {
+        for (index,object) in urlListPhoto.enumerated() {
+            guard let object = object else { break }
+            switch index {
+            case 0:
+            imageContentFirstView.load(url: object)
+            case 1:
+            imageContentSecondView.load(url: object)
+            default:
                 break
             }
-            i+=1
+            if index >= 1 {
+                break
+            }
         }
 
         let userLike = new.userLikes != 0

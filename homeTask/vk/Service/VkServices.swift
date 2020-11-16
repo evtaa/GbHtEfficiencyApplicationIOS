@@ -10,6 +10,7 @@ import Foundation
 import Alamofire
 import RealmSwift
 import UIKit
+import PromiseKit
 
 protocol SaveServiceInterface {
     func saveUsers (users: [VkApiUsersItem])
@@ -42,8 +43,9 @@ class VKService {
     }
     
     // Функция получения списка друзей пользователя
-    func loadFriendsData(userId: String){
-        
+    
+    func loadFriendsData(userId: String) -> Promise <[VkApiUsersItem]>{
+
         let path = "/friends.get"
         let parameters: Parameters = [
             "user_id": userId,
@@ -56,34 +58,41 @@ class VKService {
             "v": "5.68",
             "access_token": Session.instance.token!
         ]
-        
+
         // составляем URL из базового адреса сервиса и конкретного метода
         let url = baseUrl+path
         // делаем запрос
-            Alamofire.request(url, method: .get, parameters: parameters).responseData { [weak self] response in
-            switch response.result{
-            case .success(let data):
-                do {
-                    let  vkApiUsersResponse = try JSONDecoder().decode (VkApiUsersResponse.self, from: data)
-                    let VkApiUsersResponseItems = vkApiUsersResponse.response.items
-                    
-                    // Save user array to Database
-                    // Working with Realm
-                    self?.realmSaveService.updateUsers(users: VkApiUsersResponseItems)
-                    debugPrint (data)
-                }
-                catch DecodingError.dataCorrupted(let context) {
-                    debugPrint(DecodingError.dataCorrupted(context))
-                }
-                catch let error {
-                    debugPrint("Decoding's error \(url)")
+
+        let promise = Promise <[VkApiUsersItem]> { resolver in
+            Alamofire.request(url, method: .get, parameters: parameters).responseData { response in
+                switch response.result{
+                case .success(let data):
+                    do {
+                        let  vkApiUsersResponse = try JSONDecoder().decode (VkApiUsersResponse.self, from: data)
+                        let VkApiUsersResponseItems = vkApiUsersResponse.response.items
+
+                        // Заменяем completion на вызов резолвера
+                        resolver.fulfill(VkApiUsersResponseItems)
+                    }
+                    catch DecodingError.dataCorrupted(let context) {
+
+                        debugPrint(DecodingError.dataCorrupted(context))
+                    }
+                    catch let error {
+                        debugPrint("Decoding's error \(url)")
+                        debugPrint(error)
+                        // Заменяем completion на вызов резолвера
+                        resolver.reject(error)
+
+                    }
+                case .failure(let error):
                     debugPrint(error)
-                    debugPrint(String(bytes: data, encoding: .utf8) ?? "")
+                    // Заменяем completion на вызов резолвера
+                    resolver.reject(error)
                 }
-            case .failure(let error):
-                debugPrint(error)
             }
         }
+        return promise
     }
     
     // Функция получения фотографий пользователя
@@ -158,13 +167,13 @@ class VKService {
         let getDataOperation = GetDataOperation (request: request)
         myOwnQueue.addOperation(getDataOperation)
         
-        let parseData = ParseData ()
-        parseData.addDependency(getDataOperation)
-        myOwnQueue.addOperation(parseData)
+        let parseDataOperation = ParseDataOperation ()
+        parseDataOperation.addDependency(getDataOperation)
+        myOwnQueue.addOperation(parseDataOperation)
         
-        let saveDataToRealm = SaveDataToRealm ()
-        saveDataToRealm.addDependency(parseData)
-        OperationQueue.main.addOperation (saveDataToRealm)
+        let saveDataToRealmOperation = SaveDataToRealmOperation ()
+        saveDataToRealmOperation.addDependency(parseDataOperation)
+        OperationQueue.main.addOperation (saveDataToRealmOperation)
     }
     
     // Получения списка групп по заданной подстроке
