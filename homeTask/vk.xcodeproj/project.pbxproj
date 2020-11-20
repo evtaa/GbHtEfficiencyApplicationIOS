@@ -30,6 +30,7 @@
 		A85F43F02531D11F00C00205 /* RealmSaveService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85F43EF2531D11F00C00205 /* RealmSaveService.swift */; };
 		A867C866252B1E2100A75D7A /* GroupDB+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A867C864252B1E2100A75D7A /* GroupDB+CoreDataClass.swift */; };
 		A867C867252B1E2100A75D7A /* GroupDB+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A867C865252B1E2100A75D7A /* GroupDB+CoreDataProperties.swift */; };
+		A87D784825614E3A005A7D87 /* PhotoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D784725614E3A005A7D87 /* PhotoService.swift */; };
 		A88CBEF62507CCD600D4FA6B /* PhotosMyFriendsSwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88CBEF52507CCD600D4FA6B /* PhotosMyFriendsSwipeViewController.swift */; };
 		A89D5309255825C8001D4676 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89D5308255825C8001D4676 /* AsyncOperation.swift */; };
 		A89D530E2558268A001D4676 /* GetDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89D530D2558268A001D4676 /* GetDataOperation.swift */; };
@@ -120,6 +121,7 @@
 		A85F43EF2531D11F00C00205 /* RealmSaveService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmSaveService.swift; sourceTree = "<group>"; };
 		A867C864252B1E2100A75D7A /* GroupDB+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupDB+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A867C865252B1E2100A75D7A /* GroupDB+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupDB+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A87D784725614E3A005A7D87 /* PhotoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoService.swift; sourceTree = "<group>"; };
 		A88CBEF52507CCD600D4FA6B /* PhotosMyFriendsSwipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosMyFriendsSwipeViewController.swift; sourceTree = "<group>"; };
 		A89D5308255825C8001D4676 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		A89D530D2558268A001D4676 /* GetDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDataOperation.swift; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 		A85F43F72531D42700C00205 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				A87D784725614E3A005A7D87 /* PhotoService.swift */,
 				A8C51B1D252A175B00AC0812 /* CoreDataStack.swift */,
 				A8AEB04825211A78009E3780 /* VkServices.swift */,
 				A89D5304255824DD001D4676 /* Operation */,
@@ -733,6 +736,7 @@
 				A867C867252B1E2100A75D7A /* GroupDB+CoreDataProperties.swift in Sources */,
 				A89D5309255825C8001D4676 /* AsyncOperation.swift in Sources */,
 				A89D5313255846F5001D4676 /* ParseDataOperation.swift in Sources */,
+				A87D784825614E3A005A7D87 /* PhotoService.swift in Sources */,
 				A818A0A9252605F900E10A8A /* User.swift in Sources */,
 				A850D4EF254DE65200B8719D /* MyNewsTableViewCellForTwoPhotos.swift in Sources */,
 				A8CB045124F65C9A0006C483 /* AvatarCompositeView.swift in Sources */,

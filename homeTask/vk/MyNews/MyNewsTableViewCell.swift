@@ -17,6 +17,7 @@ class MyNewsTableViewCell: UITableViewCell {
     @IBOutlet weak var contentLabelNews: UILabel!
     @IBOutlet weak var likeUIControl: LikeUIControl!
     @IBOutlet weak var commentShareUIControl: CommentShareUIControl!
+    var photoService: PhotoService?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -40,10 +41,16 @@ class MyNewsTableViewCell: UITableViewCell {
         avatarShadow.layer.cornerRadius = avatarShadow.bounds.height/2
     }
     
-    func setup (new: VkApiNewItem) {
-        avatarMyFriendNews.load(url: new.avatarImageURL)
+    func setup (new: VkApiNewItem, tableView: UITableView?, indexPath: IndexPath) {
+        if let tableView = tableView,
+           let avatarImageURL = new.avatarImageURL {
+            photoService = PhotoService(container: tableView)
+            avatarMyFriendNews.image = photoService?.photo(atIndexpath: indexPath, byUrl: avatarImageURL)
+        }
+        //avatarMyFriendNews.load(url: new.avatarImageURL)
+        
+        
         nameMyFriendNews.text = new.nameGroupOrUser
-
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short

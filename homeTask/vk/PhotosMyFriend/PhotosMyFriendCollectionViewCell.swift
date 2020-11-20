@@ -11,6 +11,7 @@ import UIKit
 class PhotosMyFriendCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var likeUIControl: LikeUIControl!
+    var photoService: PhotoService?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -18,13 +19,18 @@ class PhotosMyFriendCollectionViewCell: UICollectionViewCell {
         // Initialization code
     }
     
-    func setup (photoFriend: VkApiPhotoItem) {
+    func setup (photoFriend: VkApiPhotoItem, collectionView: UICollectionView?, indexPath: IndexPath) {
+        if let collectionView = collectionView {
+            photoService = PhotoService(container: collectionView)
+            photoImageView.image = photoService?.photo(atIndexpath: indexPath, byUrl: photoFriend.photoLargeURL)
+        }
+        
         
         let userLike = photoFriend.userLike != 0
         likeUIControl.likeButton.setTitle(userLike ? "❤" : "💜", for: .normal)  
         let likesCount = photoFriend.likesCount
         likeUIControl.likeLabel.text = String (likesCount)
-        photoImageView.load(url: photoFriend.photoLargeURL)
+        
         
     }
 }
