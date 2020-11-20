@@ -20,7 +20,13 @@ class MyNewsTableViewCellForThreePhotos: UITableViewCell {
     @IBOutlet weak var imageContentThirdView: UIImageView!
     @IBOutlet weak var likeUIControl: LikeUIControl!
     @IBOutlet weak var commentShareUIControl: CommentShareUIControl!
-    var photoService: PhotoService?
+
+    let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter ()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        return dateFormatter
+    }()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -44,18 +50,13 @@ class MyNewsTableViewCellForThreePhotos: UITableViewCell {
         avatarShadow.layer.cornerRadius = avatarShadow.bounds.height/2
     }
     
-    func setup (new: VkApiNewItem, tableView: UITableView?, indexPath: IndexPath) {
-        if let tableView = tableView,
-           let avatarImageURL = new.avatarImageURL {
-            photoService = PhotoService(container: tableView)
+    func setup (new: VkApiNewItem, photoService: PhotoService?, indexPath: IndexPath) {
+        if let avatarImageURL = new.avatarImageURL {
             avatarMyFriendNews.image = photoService?.photo(atIndexpath: indexPath, byUrl: avatarImageURL)
         }
         nameMyFriendNews.text = new.nameGroupOrUser
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .short
-        date.text = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(new.date)))
+        let dateSince1970 = Date(timeIntervalSince1970: TimeInterval(new.date))
+        date.text = dateFormatter.string(from: dateSince1970)
         
         contentLabelNews.text = new.text
         

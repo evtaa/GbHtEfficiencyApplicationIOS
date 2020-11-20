@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pl2-fv-lTe">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pl2-fv-lTe">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -230,6 +230,7 @@
                         <searchBar key="tableHeaderView" contentMode="redraw" id="a73-md-Hai">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
                                 <outlet property="delegate" destination="QNR-Sz-RPi" id="3b6-KJ-iTs"/>
@@ -294,6 +295,7 @@
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4La-np-p8v">
                                             <rect key="frame" x="125" y="31" width="259" height="21"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -315,6 +317,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="avatarView" destination="9DI-Gz-0nK" id="JE5-DW-hMy"/>
+                                    <outlet property="button" destination="VsN-ER-rtw" id="TVv-EC-hVl"/>
                                     <outlet property="userName" destination="4La-np-p8v" id="tZ1-iW-AnR"/>
                                     <segue destination="1qL-h4-Kdk" kind="show" identifier="getSelectedFriend" id="VKp-bg-5Ke"/>
                                 </connections>
@@ -364,25 +367,33 @@
                                             </constraints>
                                         </imageView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VmC-ic-Ahu" customClass="LikeUIControl" customModule="vk" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="300" width="300" height="30"/>
+                                            <rect key="frame" x="150" y="300" width="150" height="30"/>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="30" id="1MN-lj-7lv"/>
-                                                <constraint firstAttribute="width" constant="300" id="3Fa-3X-1ra"/>
+                                                <constraint firstAttribute="width" constant="150" id="3Fa-3X-1ra"/>
                                             </constraints>
+                                        </view>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cYk-KP-3Zu" customClass="CommentShareUIControl" customModule="vk" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="300" width="150" height="30"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         </view>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="cYk-KP-3Zu" secondAttribute="bottom" id="7QM-AU-7x5"/>
                                         <constraint firstAttribute="trailing" secondItem="pzD-F8-2oe" secondAttribute="trailing" id="Cqf-UN-CaZ"/>
-                                        <constraint firstItem="VmC-ic-Ahu" firstAttribute="leading" secondItem="XoB-hZ-mBA" secondAttribute="leading" id="EXB-nG-Q4V"/>
                                         <constraint firstItem="pzD-F8-2oe" firstAttribute="leading" secondItem="XoB-hZ-mBA" secondAttribute="leading" id="GnA-cJ-sGD"/>
                                         <constraint firstItem="VmC-ic-Ahu" firstAttribute="top" secondItem="pzD-F8-2oe" secondAttribute="bottom" id="Pxb-uI-g0D"/>
                                         <constraint firstItem="pzD-F8-2oe" firstAttribute="top" secondItem="XoB-hZ-mBA" secondAttribute="top" id="YhP-BS-PVG"/>
                                         <constraint firstAttribute="bottom" secondItem="VmC-ic-Ahu" secondAttribute="bottom" id="ai4-Se-xgb"/>
+                                        <constraint firstItem="cYk-KP-3Zu" firstAttribute="leading" secondItem="XoB-hZ-mBA" secondAttribute="leading" id="fYE-xK-Cm1"/>
+                                        <constraint firstItem="VmC-ic-Ahu" firstAttribute="leading" secondItem="cYk-KP-3Zu" secondAttribute="trailing" id="kDD-GX-yss"/>
+                                        <constraint firstItem="cYk-KP-3Zu" firstAttribute="top" secondItem="pzD-F8-2oe" secondAttribute="bottom" id="lHf-yY-gsD"/>
                                         <constraint firstAttribute="trailing" secondItem="VmC-ic-Ahu" secondAttribute="trailing" id="qbu-Gz-uTl"/>
                                     </constraints>
                                 </collectionViewCellContentView>
                                 <connections>
+                                    <outlet property="commentShareUIControl" destination="cYk-KP-3Zu" id="n2g-yA-iUf"/>
                                     <outlet property="likeUIControl" destination="VmC-ic-Ahu" id="Fvc-ge-5nf"/>
                                     <outlet property="photoImageView" destination="pzD-F8-2oe" id="D85-Zx-hX1"/>
                                     <segue destination="xFi-aI-Uoj" kind="show" identifier="getSelectedFriendAndCurrentPhoto" id="KNT-HR-jxA"/>
@@ -409,26 +420,51 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="X3E-CC-73P">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="695"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hO7-Eh-NPe" customClass="LikeUIControl" customModule="vk" customModuleProvider="target">
+                                <rect key="frame" x="207" y="783" width="207" height="30"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="T2f-Zu-3yE"/>
+                                    <constraint firstAttribute="width" constant="207" id="hjH-n5-yDO"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vae-qr-b3b" customClass="CommentShareUIControl" customModule="vk" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="783" width="207" height="30"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="207" id="c16-rL-OhU"/>
+                                    <constraint firstAttribute="height" constant="30" id="z9p-xg-tnG"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fGG-vX-ycP"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="hO7-Eh-NPe" firstAttribute="leading" secondItem="vae-qr-b3b" secondAttribute="trailing" id="7L8-4Q-VVO"/>
+                            <constraint firstItem="fGG-vX-ycP" firstAttribute="trailing" secondItem="hO7-Eh-NPe" secondAttribute="trailing" id="Htt-fQ-S7d"/>
+                            <constraint firstItem="vae-qr-b3b" firstAttribute="bottom" secondItem="fGG-vX-ycP" secondAttribute="bottom" id="Sf9-qU-Aih"/>
                             <constraint firstItem="X3E-CC-73P" firstAttribute="leading" secondItem="fGG-vX-ycP" secondAttribute="leading" id="UJ0-vX-KUg"/>
+                            <constraint firstItem="vae-qr-b3b" firstAttribute="leading" secondItem="fGG-vX-ycP" secondAttribute="leading" id="VfI-Z9-IDz"/>
                             <constraint firstItem="fGG-vX-ycP" firstAttribute="trailing" secondItem="X3E-CC-73P" secondAttribute="trailing" id="amI-KZ-6gj"/>
                             <constraint firstItem="X3E-CC-73P" firstAttribute="top" secondItem="fGG-vX-ycP" secondAttribute="top" id="i6C-h4-WbI"/>
-                            <constraint firstItem="fGG-vX-ycP" firstAttribute="bottom" secondItem="X3E-CC-73P" secondAttribute="bottom" id="rUj-ox-dhp"/>
+                            <constraint firstItem="vae-qr-b3b" firstAttribute="top" secondItem="X3E-CC-73P" secondAttribute="bottom" id="k0h-1f-Ka7"/>
+                            <constraint firstItem="hO7-Eh-NPe" firstAttribute="top" secondItem="X3E-CC-73P" secondAttribute="bottom" id="kub-b5-7zF"/>
+                            <constraint firstItem="fGG-vX-ycP" firstAttribute="bottom" secondItem="hO7-Eh-NPe" secondAttribute="bottom" id="qV8-BA-TNO"/>
+                            <constraint firstItem="fGG-vX-ycP" firstAttribute="bottom" secondItem="X3E-CC-73P" secondAttribute="bottom" constant="30" id="rUj-ox-dhp"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="PKf-Zy-amO"/>
                     <connections>
+                        <outlet property="commentShareUIControl" destination="vae-qr-b3b" id="v05-VO-M8D"/>
                         <outlet property="imageView" destination="X3E-CC-73P" id="3Cz-W7-7XQ"/>
+                        <outlet property="likeUIControl" destination="hO7-Eh-NPe" id="9NO-RQ-rHb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vQC-YD-Cus" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5407" y="139"/>
+            <point key="canvasLocation" x="5405.7971014492759" y="138.61607142857142"/>
         </scene>
         <!--My communities-->
         <scene sceneID="gWR-Ic-IYH">

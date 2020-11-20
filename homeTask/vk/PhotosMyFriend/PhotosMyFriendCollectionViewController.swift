@@ -14,15 +14,16 @@ class PhotosMyFriendCollectionViewController: UICollectionViewController {
     internal let newRefreshControl = UIRefreshControl()
     
     var friendSelected : VkApiUsersItem?
-    //var photosFriend = List<VkApiPhotoItem>()
     var photosFriend = [VkApiPhotoItem?] ()
 
     let vkService = VKService()
     var token: NotificationToken?
+    var photoService: PhotoService?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        photoService = PhotoService (container: collectionView)
         setupCollectionView ()
         setupRefreshControl ()
         // отправим запрос для получения  фотографий пользователя
@@ -108,6 +109,8 @@ class PhotosMyFriendCollectionViewController: UICollectionViewController {
             photo.photoSmallURL =  object.photoSmallURL
             photo.photoMediumURL =  object.photoMediumURL
             photo.photoLargeURL =  object.photoLargeURL
+            photo.commentsCount = object.commentsCount
+            photo.repostsCount = object.repostsCount
             array.append(photo)
         }
         return array
@@ -130,7 +133,7 @@ class PhotosMyFriendCollectionViewController: UICollectionViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoSelectedFriend", for: indexPath) as! PhotosMyFriendCollectionViewCell
         
         guard let photoFriend  = self.photosFriend [indexPath.row] else {return cell}
-        cell.setup (photoFriend: photoFriend, collectionView: self.collectionView, indexPath: indexPath)
+        cell.setup (photoFriend: photoFriend, photoService: photoService, indexPath: indexPath)
         return cell
         
         // Configure the cell
