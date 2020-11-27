@@ -10,29 +10,70 @@ import Foundation
 import RealmSwift
 
 class VkApiNewsResponseItems: Decodable {
-    let response: VkApiNewsItems
+    let response: VkApiNewsItems?
+    enum CodingKeys: String, CodingKey {
+           case response
+       }
+       init(response: VkApiNewsItems?) {
+           self.response = response
+       }
 }
 class VkApiNewsItems: Decodable {
-    var items: [VkApiNewItem]
+    var items: [VkApiNewItem]?
+    var nextFrom: String?
+    enum CodingKeys: String, CodingKey {
+           case items
+           case nextFrom = "next_from"
+       }
+    init(items: [VkApiNewItem]?, nextFrom: String?) {
+           self.items = items
+           self.nextFrom = nextFrom
+       }
 }
 
 class VkApiNewsResponseGroups: Decodable {
-    let response: VkApiNewsGroups
+    let response: VkApiNewsGroups?
+    enum CodingKeys: String, CodingKey {
+           case response
+       }
+       init(response: VkApiNewsGroups?) {
+           self.response = response
+       }
 }
 class VkApiNewsGroups: Decodable {
-    let groups: [VkApiGroupItem]
+    let groups: [VkApiGroupItem]?
+    enum CodingKeys: String, CodingKey {
+           case groups
+       }
+    init(groups: [VkApiGroupItem]?) {
+           self.groups = groups
+       }
 }
 
 class VkApiNewsResponseProfiles: Decodable {
-    let response: VkApiNewsProfiles
+    let response: VkApiNewsProfiles?
+    enum CodingKeys: String, CodingKey {
+           case response
+       }
+       init(response: VkApiNewsProfiles?) {
+           self.response = response
+       }
 }
 class VkApiNewsProfiles: Decodable {
-    let profiles: [VkApiUsersItem]
+    let profiles: [VkApiUsersItem]?
+    enum CodingKeys: String, CodingKey {
+           case profiles
+       }
+    init(profiles: [VkApiUsersItem]?) {
+           self.profiles = profiles
+       }
 }
 
 class VkApiNewItem: Object, Decodable {
 
-    
+    @objc dynamic var id: Int = 0
+    @objc static  var countNews: Int = 0
+    @objc dynamic var isExpanded: Bool = false
     @objc dynamic var avatarImageURL: String?
     @objc dynamic var nameGroupOrUser: String?
     @objc dynamic var type: String?
@@ -47,6 +88,14 @@ class VkApiNewItem: Object, Decodable {
     @objc dynamic var typeAttachment: String?
     dynamic var listPhotoAttachmentImageURL = List<String?>()
     dynamic var listPhotoImageURL = List<String?>()
+    dynamic var listHeightPhotoAttachment = List<String?>()
+    dynamic var listWidthPhotoAttachment = List<String?>()
+    dynamic var listHeightPhotoImage = List<String?>()
+    dynamic var listWidthPhotoImage = List<String?>()
+    
+    override static func primaryKey() -> String? {
+            return "id"
+        }
 
     enum CodingKeys: String, CodingKey {
         case type
@@ -78,14 +127,23 @@ class VkApiNewItem: Object, Decodable {
     }
     enum PhotoKeys: String, CodingKey {
         case photo_604
+        case height
+        case width
     }
     enum PhotosKeys: String, CodingKey {
         case items
     }
     
+    override init() {
+        super.init()
+        Self.countNews = Self.countNews + 1
+        self.id = Self.countNews
+    }
     
     convenience required init(from decoder: Decoder) throws {
         self.init()
+        
+        
         let values = try decoder.container(keyedBy: CodingKeys.self)
         self.type = try? values.decode(String.self, forKey: .type)
         self.sourceId = try values.decode(Int.self, forKey: .source_id)
@@ -121,20 +179,34 @@ class VkApiNewItem: Object, Decodable {
             switch (typeAttachment) {
             case "photo":
                 let photo = try? firstAttachmentsValues?.nestedContainer(keyedBy: PhotoKeys.self, forKey: .photo)
+                
                 let photoImageURL = try? photo?.decode(String.self, forKey: .photo_604)
                 self.listPhotoAttachmentImageURL.append(photoImageURL)
-                //self.listPhotoImageURL.append(photoImageURL)
+                
+                let heightPhotoImage = try? photo?.decode(String.self, forKey: .height)
+                self.listHeightPhotoAttachment.append(heightPhotoImage)
+                
+                let widthPhotoImage = try? photo?.decode(String.self, forKey: .width)
+                self.listWidthPhotoAttachment.append(widthPhotoImage)
+                
                 break
             default: break
             }
         }
-
+        
         let photos = try? values.nestedContainer(keyedBy: PhotosKeys.self, forKey: .photos)
         var items = try? photos?.nestedUnkeyedContainer(forKey: .items)
         for _ in 0..<(items?.count ?? 0){
             let firstItemsValues = try? items?.nestedContainer(keyedBy: PhotoKeys.self)
+            
             let photoImageURL = try? firstItemsValues?.decode(String.self, forKey: .photo_604)
             self.listPhotoImageURL.append(photoImageURL)
+            
+            let heightPhotoImage = try? firstItemsValues?.decode(String.self, forKey: .height)
+            self.listHeightPhotoImage.append(heightPhotoImage)
+            
+            let widthPhotoImage = try? firstItemsValues?.decode(String.self, forKey: .width)
+            self.listWidthPhotoImage.append(widthPhotoImage)
         }
     }
 }

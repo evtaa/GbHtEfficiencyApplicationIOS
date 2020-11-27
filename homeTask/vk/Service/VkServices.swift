@@ -34,9 +34,6 @@ class VKService {
     let coreDataSaveService = CoreDataSaveService ()
     let firebaseSaveService = FirebaseSaveService ()
     
-    var nextFrom = ""
-    
-    
     // Функция сохранения текущего пользователя приложением
     func saveCurrentUserApplication (userId: Int) {
         firebaseSaveService.saveCurrentUserApplication (id: userId)
@@ -45,7 +42,7 @@ class VKService {
     // Функция получения списка друзей пользователя
     
     func loadFriendsData(userId: String) -> Promise <[VkApiUsersItem]>{
-
+        
         let path = "/friends.get"
         let parameters: Parameters = [
             "user_id": userId,
@@ -58,11 +55,11 @@ class VKService {
             "v": "5.68",
             "access_token": Session.instance.token!
         ]
-
+        
         // составляем URL из базового адреса сервиса и конкретного метода
         let url = baseUrl+path
         // делаем запрос
-
+        
         let promise = Promise <[VkApiUsersItem]> { resolver in
             Alamofire.request(url, method: .get, parameters: parameters).responseData { response in
                 switch response.result{
@@ -70,12 +67,12 @@ class VKService {
                     do {
                         let  vkApiUsersResponse = try JSONDecoder().decode (VkApiUsersResponse.self, from: data)
                         let VkApiUsersResponseItems = vkApiUsersResponse.response.items
-
+                        
                         // Заменяем completion на вызов резолвера
                         resolver.fulfill(VkApiUsersResponseItems)
                     }
                     catch DecodingError.dataCorrupted(let context) {
-
+                        
                         debugPrint(DecodingError.dataCorrupted(context))
                     }
                     catch let error {
@@ -83,7 +80,7 @@ class VKService {
                         debugPrint(error)
                         // Заменяем completion на вызов резолвера
                         resolver.reject(error)
-
+                        
                     }
                 case .failure(let error):
                     debugPrint(error)
@@ -163,16 +160,16 @@ class VKService {
         // составляем URL из базового адреса сервиса и конкретного метода
         let url = baseUrl+path
         // делаем запрос
-                
+        
         let request =  Alamofire.request(url, method: .get, parameters: parameters)
-
+        
         let getDataOperation = GetDataOperation (request: request)
         myOwnQueue.addOperation(getDataOperation)
-
+        
         let parseDataOperation = ParseDataOperation ()
         parseDataOperation.addDependency(getDataOperation)
         myOwnQueue.addOperation(parseDataOperation)
-
+        
         let saveDataToRealmOperation = SaveDataToRealmOperation ()
         saveDataToRealmOperation.addDependency(parseDataOperation)
         OperationQueue.main.addOperation (saveDataToRealmOperation)
@@ -226,7 +223,11 @@ class VKService {
         case photo
     }
     
-    func loadNewsData(typeNew: TypeNew ...){
+    enum loadNewsDataError: Error {
+        case invalidNews
+    }
+    
+    func loadNewsData(startTime: Int = 0, startFrom: String = "", typeNew: TypeNew ..., completion: @escaping (Swift.Result <[VkApiNewItem]?, loadNewsDataError>, String?) -> Void){
         var filters: String = ""
         for item in typeNew {
             switch item {
@@ -241,12 +242,12 @@ class VKService {
         let parameters: Parameters = [
             "filters": filters,
             "return_banned": "0",
-            //"start_time": "",
+            "start_time": String(startTime),
             //"end_time": "",
             //"max_photos": "",
             //"source_ids": "",
-            // "start_from": nextFrom,
-            "count": "10",
+            "start_from": startFrom,
+            "count": "15",
             //"fields": "",
             //"section": "",
             "v": "5.68",
@@ -256,19 +257,20 @@ class VKService {
         // составляем URL из базового адреса сервиса и конкретного метода
         let url = baseUrl+path
         // делаем запрос
-        Alamofire.request(url, method: .get, parameters: parameters).responseData { [weak self] response in
+        Alamofire.request(url, method: .get, parameters: parameters).responseData { response in
             switch response.result{
             case .success(let data):
                 debugPrint (data)
-                var VkApiItems: [VkApiNewItem] = []
-                var VkApiProfiles: [VkApiUsersItem] = []
-                var VkApiGroups: [VkApiGroupItem] = []
-                
+                var VkApiNextFrom: String?
+                var VkApiItems: [VkApiNewItem]?
+                var VkApiProfiles: [VkApiUsersItem]?
+                var VkApiGroups: [VkApiGroupItem]?
                 let dispatchGroup = DispatchGroup ()
+                
                 DispatchQueue.global().async (group: dispatchGroup) {
-                    //VkApiNewsResponseItems = vkApiNewsResponse.response.items
                     do {
-                        VkApiItems = try JSONDecoder().decode (VkApiNewsResponseItems.self, from: data).response.items
+                        VkApiItems = try JSONDecoder().decode (VkApiNewsResponseItems.self, from: data).response?.items
+                        VkApiNextFrom = try JSONDecoder().decode (VkApiNewsResponseItems.self, from: data).response?.nextFrom
                     }
                     catch DecodingError.dataCorrupted(let context) {
                         debugPrint(DecodingError.dataCorrupted(context))
@@ -282,9 +284,8 @@ class VKService {
                     }
                 }
                 DispatchQueue.global().async (group: dispatchGroup) {
-                    //VkApiNewsResponseProfiles = vkApiNewsResponse.response.profiles
                     do {
-                        VkApiGroups = try JSONDecoder().decode (VkApiNewsResponseGroups.self, from: data).response.groups
+                        VkApiGroups = try JSONDecoder().decode (VkApiNewsResponseGroups.self, from: data).response?.groups
                     }
                     catch DecodingError.dataCorrupted(let context) {
                         debugPrint(DecodingError.dataCorrupted(context))
@@ -298,9 +299,8 @@ class VKService {
                     }
                 }
                 DispatchQueue.global().async (group: dispatchGroup) {
-                    //VkApiNewsResponseGroups = vkApiNewsResponse.response.groups
                     do {
-                        VkApiProfiles = try JSONDecoder().decode (VkApiNewsResponseProfiles.self, from: data).response.profiles
+                        VkApiProfiles = try JSONDecoder().decode (VkApiNewsResponseProfiles.self, from: data).response?.profiles
                     }
                     catch DecodingError.dataCorrupted(let context) {
                         debugPrint(DecodingError.dataCorrupted(context))
@@ -314,9 +314,10 @@ class VKService {
                     }
                 }
                 dispatchGroup.notify(queue: DispatchQueue.main) {
+                    if let VkApiItems = VkApiItems {
                     for object in VkApiItems {
                         if object.sourceId > 0 {
-                            let profile = VkApiProfiles.filter({$0.id == object.sourceId}).first
+                            let profile = VkApiProfiles?.filter({$0.id == object.sourceId}).first
                             guard let imageURL = profile?.avatarPhotoURL else {return}
                             object.avatarImageURL = imageURL
                             guard let firstName = profile?.firstName,
@@ -325,18 +326,18 @@ class VKService {
                             object.nameGroupOrUser = (firstName) + " " + (lastName)
                         }
                         else {
-                            let group = VkApiGroups.filter({$0.id == abs(object.sourceId)}).first
+                            let group = VkApiGroups?.filter({$0.id == abs(object.sourceId)}).first
                             guard let imageURL = group?.photoMediumURL else {return}
                             object.avatarImageURL = imageURL
                             guard let name = group?.name else {return}
                             object.nameGroupOrUser = name
                         }
                     }
-                    // Save user array to Database
-                    // Working with Realm
-                    self?.realmSaveService.updateNews(news: VkApiItems)
+                    completion(.success(VkApiItems),VkApiNextFrom)
                 }
+            }
             case .failure(let error):
+                completion(.failure(loadNewsDataError.invalidNews),"")
                 debugPrint(error)
             }
         }

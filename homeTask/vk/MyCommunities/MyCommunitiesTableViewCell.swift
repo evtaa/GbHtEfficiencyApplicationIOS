@@ -19,7 +19,7 @@ class MyCommunitiesTableViewCell: UITableViewCell {
         // Initialization code
     }
     
-    func setup (group: VkApiGroupItem, photoService: PhotoService?, indexPath: IndexPath) {
+    func config (group: VkApiGroupItem, photoService: PhotoService?, indexPath: IndexPath) {
         
         avatarView.avatarPhoto.image = photoService?.photo(atIndexpath: indexPath, byUrl: group.photoLargeURL)
         name.text = group.name

@@ -19,7 +19,7 @@ class AllCommunitiesTableViewCell: UITableViewCell {
         // Initialization code
     }
     
-    func setup (group: VkApiGroupItem) {
+    func config (group: VkApiGroupItem) {
         
         name.text = group.name
         
