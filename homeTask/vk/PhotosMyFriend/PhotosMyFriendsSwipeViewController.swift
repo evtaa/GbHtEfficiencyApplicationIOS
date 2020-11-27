@@ -14,6 +14,8 @@ class PhotosMyFriendsSwipeViewController: UIViewController {
     var friendSelected : VkApiUsersItem?
     var photosFriend : [VkApiPhotoItem?]?
     var indexImage : Int = 0
+    @IBOutlet weak var likeUIControl: LikeUIControl!
+    @IBOutlet weak var commentShareUIControl: CommentShareUIControl!
     
     @IBOutlet weak var imageView: UIImageView!
     
@@ -22,15 +24,31 @@ class PhotosMyFriendsSwipeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupViewController ()
+        setupSwipeGestureRecognizer ()
+    }
+    
+    private func setupViewController () {
         if let lastName = friendSelected?.lastName,
-            let firstName = friendSelected?.firstName {
+           let firstName = friendSelected?.firstName {
             self.navigationItem.title = lastName + " " + firstName
         }
-        self.imageView.image =  getUIImageFromURL(inputURL: photosFriend![indexImage]!.photoLargeURL)
+        if let url = photosFriend?[indexImage]?.photoLargeURL {
+            self.imageView.load (url: url)
+        }
+        if let likesCount = photosFriend?[indexImage]?.likesCount {
+            self.likeUIControl.likeLabel.text = String (likesCount)
+        }
+        if let repostsCount = photosFriend?[indexImage]?.repostsCount {
+            self.commentShareUIControl.shareCount.text = String(repostsCount)
+        }
+        if let commentsCount = photosFriend?[indexImage]?.commentsCount {
+            self.commentShareUIControl.commentCount.text = String(commentsCount)
+        }
+    }
+    
+    private func setupSwipeGestureRecognizer () {
         self.imageView.isUserInteractionEnabled = true
-        
-        //addSwipe ()
-        
         // Инициализация и добавление параметров жестов
         let directions: [UISwipeGestureRecognizer.Direction] = [.down, .up, .left, .right]
         for direction in directions {
@@ -40,35 +58,25 @@ class PhotosMyFriendsSwipeViewController: UIViewController {
         }
     }
     
-    // MARK: CustomFunction
-    
-    func getUIImageFromURL ( inputURL: String) -> UIImage {
-        let url = URL(string: inputURL)
-            if let data = try? Data(contentsOf: url!)
-            {
-                return UIImage(data: data) ?? UIImage()
-            }
-        return  UIImage()
-    }
-    
     // MARK: UISwipeGestureRecognizer
     
     @objc func handleSwipe (gesture: UISwipeGestureRecognizer) {
         
         let direction = gesture.direction
-        
+        guard let photosFriend = photosFriend else {return}
         switch direction {
-            
         case .left:
             
-            if indexImage == photosFriend!.count - 1 {
+            if indexImage == photosFriend.count - 1 {
                 indexImage = 0
             } else {
                 indexImage += 1
             }
-            self.imageView.image = getUIImageFromURL(inputURL: photosFriend![indexImage]!.photoLargeURL)
+            if let url = photosFriend[indexImage]?.photoLargeURL {
+                self.imageView.load(url: url)
+            }
             
-            UIView.animate(withDuration: 1) {
+            UIView.animate(withDuration: 1) { [weak self] in
                 let animation = CATransition ()
                 animation.duration = 1
                 animation.startProgress = 0.5
@@ -80,22 +88,34 @@ class PhotosMyFriendsSwipeViewController: UIViewController {
                 animation.isRemovedOnCompletion = false
                 animation.autoreverses = false
                 
-                self.imageView.layer.add (animation, forKey: "pageFlipAnimation")
+                self?.imageView.layer.add (animation, forKey: "pageFlipAnimation")
                 // self.containerView.addSubview (self.imageView)
-                self.imageView.image =  self.getUIImageFromURL(inputURL: self.photosFriend![self.indexImage]!.photoLargeURL)
-               
+                guard let indexImage = self?.indexImage else {return}
+                if let url = self?.photosFriend?[indexImage]?.photoLargeURL {
+                    self?.imageView.load(url: url)
+                }
+                if let likesCount = self?.photosFriend?[indexImage]?.likesCount {
+                    self?.likeUIControl.likeLabel.text = String (likesCount)
+                }
+                if let repostsCount = self?.photosFriend?[indexImage]?.repostsCount {
+                    self?.commentShareUIControl.shareCount.text = String (repostsCount)
+                }
+                if let commentsCount = self?.photosFriend?[indexImage]?.commentsCount {
+                    self?.commentShareUIControl.commentCount.text = String (commentsCount)
+                }
             }
             
         case .right:
-            
             if indexImage == 0 {
-                indexImage = photosFriend!.count - 1
+                indexImage = photosFriend.count - 1
             } else {
                 indexImage -= 1
             }
-            self.imageView.image =  self.getUIImageFromURL(inputURL: self.photosFriend![self.indexImage]!.photoLargeURL)
+            if let url = photosFriend[indexImage]?.photoLargeURL {
+                self.imageView.load(url: url)
+            }
             
-            UIView.animate(withDuration: 1) {
+            UIView.animate(withDuration: 1) { [weak self] in
                 let animation = CATransition ()
                 animation.duration = 1
                 animation.startProgress = 0.5
@@ -107,9 +127,12 @@ class PhotosMyFriendsSwipeViewController: UIViewController {
                 animation.isRemovedOnCompletion = false
                 animation.autoreverses = false
                 
-                self.imageView.layer.add (animation, forKey: "pageFlipAnimation")
+                self?.imageView.layer.add (animation, forKey: "pageFlipAnimation")
                 // self.containerView.addSubview (self.imageView)
-                self.imageView.image =  self.getUIImageFromURL(inputURL: self.photosFriend![self.indexImage]!.photoLargeURL)
+                if let indexImage = self?.indexImage,
+                   let url = self?.photosFriend?[indexImage]?.photoLargeURL{
+                        self?.imageView.load(url: url)
+                }
             }
         default:
             break

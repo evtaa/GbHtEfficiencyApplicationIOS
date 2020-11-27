@@ -10,25 +10,93 @@ import UIKit
 
 class MyFriendsTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var avatarView: AvatarCompositeView!
-    @IBOutlet weak var userName: UILabel!
-    var photoService: PhotoService?
-   
+    let indent: CGFloat = 10.0
+    let avatarSideLenght: CGFloat = 80.0
+    
+    @IBOutlet weak var avatarView: AvatarCompositeView! {
+        didSet {
+            avatarView.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
+    @IBOutlet weak var userName: UILabel! {
+        didSet {
+            userName.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
+    @IBOutlet weak var button: UIButton! {
+        didSet {
+            button.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
     
+    func setUserName(text: String) {
+        userName.text = text
+        userNameLabelFrame ()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        avatarViewFrame()
+        buttonFrame()
+        userNameLabelFrame ()
+    }
+    
+    func getLabelSize(text: String, font: UIFont) -> CGSize {
+        //определяем максимальную ширину, которую может занимать наш текст
+        //это ширина ячейки минус отступы слева и справа
+        let maxWidth = bounds.width - indent * 2 - avatarView.bounds.width - 35
+        //получаем размеры блока, в который надо вписать надпись
+        //используем максимальную ширину и максимально возможную высоту
+        let textBlock = CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude)
+        //получим прямоугольник, который займёт наш текст в этом блоке, уточняем, каким шрифтом он будет написан
+        let rect = text.boundingRect(with: textBlock, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+        //получаем ширину блока, переводим ее в Double
+        let width = Double(rect.size.width)
+        //получаем высоту блока, переводим ее в Double
+        let height = Double(rect.size.height)
+        //получаем размер, при этом округляем значения до большего целого числа
+        let size = CGSize(width: ceil(width), height: ceil(height))
+        return size
+    }
+    
+    func userNameLabelFrame() {
+        //получаем размер текста, передавая сам текст и шрифт.
+        let userNameLabelSize = getLabelSize(text: userName.text!, font: userName.font)
+        //рассчитывает координату по оси Х
+        let userNameLabelX = bounds.width - userNameLabelSize.width - indent - 35 - avatarView.bounds.width
+        //let userNameLabelX = indent + avatarView.bounds.width
+        //рассчитывает координату по оси Y
+        let userNameLabelY = bounds.height - indent - (avatarView.bounds.height + userNameLabelSize.height)/2
+        //получим точку верхнего левого угла надписи
+        let userNameLabelOrigin = CGPoint(x:  userNameLabelX, y: userNameLabelY)
+        //получаем фрейм и устанавливаем UILabel
+        userName.frame = CGRect(origin: userNameLabelOrigin, size: userNameLabelSize)
+    }
+    
+    func avatarViewFrame() {
+        let avatarSize = CGSize(width: avatarSideLenght, height: avatarSideLenght)
+        let avatarOrigin = CGPoint(x: indent, y: indent)
+        avatarView.frame = CGRect(origin: avatarOrigin, size: avatarSize)
+    }
+    
+    func buttonFrame() {
+        let buttonSize = CGSize(width: avatarSideLenght, height: avatarSideLenght)
+        let buttonOrigin = CGPoint(x: indent, y: indent)
+        button.frame = CGRect(origin: buttonOrigin, size: buttonSize)
+    }
+    
     // MARK: Configure Cell
     
-    func setup (user: VkApiUsersItem, tableView: UITableView?, indexPath: IndexPath) {
-        if let tableView = tableView,
-           let avatarPhotoURL = user.avatarPhotoURL {
-            photoService = PhotoService(container: tableView)
+    func setup (user: VkApiUsersItem, photoService: PhotoService?, indexPath: IndexPath) {
+        if let avatarPhotoURL = user.avatarPhotoURL {
             avatarView.avatarPhoto.image = photoService?.photo(atIndexpath: indexPath, byUrl: avatarPhotoURL)
         }
-        userName.text = user.lastName + " " + user.firstName
+        setUserName(text: user.lastName + " " + user.firstName)
         avatarView.setup()
     }
     
@@ -49,8 +117,7 @@ class MyFriendsTableViewCell: UITableViewCell {
                         self.avatarView.avatarPhoto.bounds.size.height -= 10
                         self.avatarView.avatarPhoto.bounds.size.width -= 10
                         self.avatarView.avatarPhoto.layer.cornerRadius -=  5
-        })
-        
+                       })
     }
     
     @IBAction func upButtonTouchUpInside(_ sender: Any) {
@@ -68,7 +135,7 @@ class MyFriendsTableViewCell: UITableViewCell {
                         self.avatarView.avatarPhoto.bounds.size.height += 10
                         self.avatarView.avatarPhoto.bounds.size.width += 10
                         self.avatarView.avatarPhoto.layer.cornerRadius +=  5
-        })
+                       })
     }
     
     @IBAction func upButtonTouchUpOutside(_ sender: UIButton) {
@@ -86,8 +153,7 @@ class MyFriendsTableViewCell: UITableViewCell {
                         self.avatarView.avatarPhoto.bounds.size.height += 10
                         self.avatarView.avatarPhoto.bounds.size.width += 10
                         self.avatarView.avatarPhoto.layer.cornerRadius +=  5
-        })
-        
+                       })
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -15,10 +15,12 @@ class MyNewsTableViewController: UITableViewController {
     var myNews: [VkApiNewItem]?
     let vkService = VKService ()
     var token: NotificationToken?
+    var photoService: PhotoService?
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        photoService = PhotoService(container: tableView)
         setupTableView ()
         setupRefreshControl ()
         //отправим запрос для получения  новостей пользователя
@@ -148,24 +150,24 @@ class MyNewsTableViewController: UITableViewController {
 
         if countImages == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCell", for: indexPath) as! MyNewsTableViewCell
-            cell.setup(new: myNew, tableView: self.tableView, indexPath: indexPath)
+            cell.setup(new: myNew, photoService: photoService, indexPath: indexPath)
             return cell
         }
         else if countImages == 1 {
            let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForOnePhoto", for: indexPath) as! MyNewsTableViewCellForOnePhoto
-            cell.setup(new: myNew, tableView: self.tableView, indexPath: indexPath)
+            cell.setup(new: myNew, photoService: photoService, indexPath: indexPath)
             return cell
         } else if countImages == 2  {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForTwoPhotos", for: indexPath) as! MyNewsTableViewCellForTwoPhotos
-            cell.setup(new: myNew, tableView: self.tableView, indexPath: indexPath)
+            cell.setup(new: myNew, photoService: photoService, indexPath: indexPath)
             return cell
         } else if countImages == 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForThreePhotos", for: indexPath) as! MyNewsTableViewCellForThreePhotos
-            cell.setup(new: myNew, tableView: self.tableView, indexPath: indexPath)
+            cell.setup(new: myNew, photoService: photoService, indexPath: indexPath)
             return cell
         } else if countImages > 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForFourPhotos", for: indexPath) as! MyNewsTableViewCellForFourPhotos
-            cell.setup(new: myNew, tableView: self.tableView, indexPath: indexPath)
+            cell.setup(new: myNew, photoService: photoService, indexPath: indexPath)
             return cell
         } else{
             return cell

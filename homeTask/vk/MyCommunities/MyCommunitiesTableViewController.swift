@@ -15,10 +15,12 @@ class MyCommunitiesTableViewController: UITableViewController {
     var myGroups: [VkApiGroupItem]?
     let vkService = VKService ()
     var token: NotificationToken?
+    var photoService: PhotoService?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        photoService = PhotoService(container: tableView)
         setupTableView ()
         setupRefreshControl ()
         // отправим запрос для получения  групп пользователя
@@ -119,7 +121,7 @@ class MyCommunitiesTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyCommunitiesCell", for: indexPath) as! MyCommunitiesTableViewCell
         
         guard let myGroup  = self.myGroups? [indexPath.row] else { return cell }
-        cell.setup(group: myGroup, tableView: self.tableView, indexPath: indexPath)
+        cell.setup(group: myGroup, photoService: photoService, indexPath: indexPath)
         return cell
     }
     

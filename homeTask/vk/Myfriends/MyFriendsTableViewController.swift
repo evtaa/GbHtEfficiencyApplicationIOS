@@ -22,14 +22,15 @@ class MyFriendsTableViewController: UITableViewController {
     let vkService = VKService()
     var token: NotificationToken?
     var usersOfApplication = [FirebaseUser] ()
+    var photoService: PhotoService?
     
     @IBOutlet weak var searchBar: UISearchBar!
-    
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
+        photoService = PhotoService (container: tableView)
         setupTableView ()
         setupRefreshControl ()
         // отправим запрос для получения  списка друзей
@@ -93,7 +94,6 @@ class MyFriendsTableViewController: UITableViewController {
                     }
             self.usersOfApplication = users
         })
-        
     }
     
     func pairTableAndRealm(completion: @escaping  ([VkApiUsersItem]) -> Void ) {
@@ -177,8 +177,9 @@ class MyFriendsTableViewController: UITableViewController {
         
         let myFriendNameKey = myFriendNameSectionTitles [indexPath.section]
         if let myFriendValue = myFriendsDictionary [myFriendNameKey] {
+            
             let user = myFriendValue [indexPath.row]
-            cell.setup(user: user, tableView: self.tableView, indexPath: indexPath)
+            cell.setup(user: user, photoService: photoService, indexPath: indexPath)
         }
         return cell
     }

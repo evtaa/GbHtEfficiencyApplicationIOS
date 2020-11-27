@@ -25,6 +25,9 @@ class VkApiPhotoItem: Object, Decodable {
 
     @objc  dynamic var likesCount: Int = 0
     @objc  dynamic var userLike: Int = 0
+    @objc  dynamic var repostsCount: Int = 0
+    @objc  dynamic var commentsCount: Int = 0
+    
 
     @objc  dynamic var photoSmallURL: String = ""
     @objc  dynamic var photoMediumURL: String = ""
@@ -40,6 +43,8 @@ class VkApiPhotoItem: Object, Decodable {
         case id
         case date
         case likes
+        case reposts
+        case comments
         case sizes
         case owner_id
     }
@@ -47,6 +52,14 @@ class VkApiPhotoItem: Object, Decodable {
     enum LikesKeys: String, CodingKey {
         case likes_count = "count"
         case user_likes
+    }
+    
+    enum RepostsKeys: String, CodingKey {
+        case reposts_count = "count"
+    }
+    
+    enum CommentsKeys: String, CodingKey {
+        case comments_count = "count"
     }
 
     enum SizesKeys: String, CodingKey {
@@ -65,6 +78,12 @@ class VkApiPhotoItem: Object, Decodable {
         let likes = try values.nestedContainer(keyedBy: LikesKeys.self, forKey: .likes)
         self.likesCount = try likes.decode(Int.self, forKey: .likes_count)
         self.userLike = try likes.decode(Int.self, forKey: .user_likes)
+        
+        let reposts = try values.nestedContainer(keyedBy: RepostsKeys.self, forKey: .reposts)
+        self.repostsCount = try reposts.decode(Int.self, forKey: .reposts_count)
+        
+        let comments = try values.nestedContainer(keyedBy: CommentsKeys.self, forKey: .comments)
+        self.commentsCount = try comments.decode(Int.self, forKey: .comments_count)
         
         var sizes = try values.nestedUnkeyedContainer(forKey: .sizes)
         for _ in 0..<(sizes.count ?? 0) {
