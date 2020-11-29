@@ -19,7 +19,7 @@ class PhotosMyFriendCollectionViewCell: UICollectionViewCell {
         // Initialization code
     }
     
-    func setup (photoFriend: VkApiPhotoItem, photoService: PhotoService?, indexPath: IndexPath) {
+    func config (photoFriend: VkApiPhotoItem, photoService: PhotoService?, indexPath: IndexPath) {
             photoImageView.image = photoService?.photo(atIndexpath: indexPath, byUrl: photoFriend.photoLargeURL)
         
         let userLike = photoFriend.userLike != 0

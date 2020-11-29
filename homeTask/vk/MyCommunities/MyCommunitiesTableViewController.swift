@@ -121,7 +121,7 @@ class MyCommunitiesTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyCommunitiesCell", for: indexPath) as! MyCommunitiesTableViewCell
         
         guard let myGroup  = self.myGroups? [indexPath.row] else { return cell }
-        cell.setup(group: myGroup, photoService: photoService, indexPath: indexPath)
+        cell.config (group: myGroup, photoService: photoService, indexPath: indexPath)
         return cell
     }
     

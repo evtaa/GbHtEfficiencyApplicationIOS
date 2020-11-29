@@ -47,7 +47,7 @@ class AllCommunitiesTableViewController: UITableViewController {
         guard let searchGroup  = self.searchGroups?[indexPath.row] else {
                     return cell
                 }
-        cell.setup(group: searchGroup)
+        cell.config (group: searchGroup)
         
         return cell
         

@@ -179,7 +179,7 @@ class MyFriendsTableViewController: UITableViewController {
         if let myFriendValue = myFriendsDictionary [myFriendNameKey] {
             
             let user = myFriendValue [indexPath.row]
-            cell.setup(user: user, photoService: photoService, indexPath: indexPath)
+            cell.config (user: user, photoService: photoService, indexPath: indexPath)
         }
         return cell
     }

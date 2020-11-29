@@ -17,23 +17,36 @@ class MyNewsTableViewController: UITableViewController {
     var token: NotificationToken?
     var photoService: PhotoService?
     
+    var nextFrom = ""
+    var isLoading = false
+    
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
         photoService = PhotoService(container: tableView)
         setupTableView ()
         setupRefreshControl ()
-        //отправим запрос для получения  новостей пользователя
-        fetchNewsData ()
+        // очищаем базу данных от новостей
+        clearNewsFromRealm {
+            //отправим запрос для получения  новостей пользователя
+            self.fetchNewsData ()
+        }
         pairTableAndRealm { [weak self] myNews in
             guard let tableView = self?.tableView else { return }
-            self?.myNews = myNews
+            self?.myNews = myNews.sorted {$0.date > $1.date}
             tableView.reloadData()
-            self?.newRefreshControl.endRefreshing()
         }
     }
     
+    private func clearNewsFromRealm (completion: @escaping ()-> Void) {
+        self.vkService.realmSaveService.deleteNews()
+        completion ()
+    }
     private func setupTableView () {
+        
+        tableView.prefetchDataSource = self
         
         self.tableView.register(UINib (nibName: "MyNewsTableViewCellForOnePhoto", bundle: nil), forCellReuseIdentifier: "MyNewsCellForOnePhoto")
         self.tableView.register(UINib (nibName: "MyNewsTableViewCellForTwoPhotos", bundle: nil), forCellReuseIdentifier: "MyNewsCellForTwoPhotos")
@@ -61,16 +74,51 @@ class MyNewsTableViewController: UITableViewController {
     }
     
     @objc func refreshNewsData(_ sender: Any) {
-        fetchNewsData ()
+        // Начинаем обновление новостей
+        self.newRefreshControl.beginRefreshing()
+        // Определяем время самой свежей новости
+        // или берем текущее время
+        if let mostFreshNewDate = self.myNews?.first?.date {
+            fetchNewsData (startTime: mostFreshNewDate + 1)
+        }
+        else {
+            fetchNewsData (startTime: Int(Date().timeIntervalSince1970 + 1))
+        }
     }
     
-    private func fetchNewsData () {
+    private func fetchNewsData (startTime: Int = 0) {
         DispatchQueue.global().async { [weak self] in
-            self?.vkService.loadNewsData(typeNew: .post,.photo)
+            // отправляем сетевой запрос загрузки новостей
+            self?.vkService.loadNewsData(startTime: startTime, typeNew: .post,.photo) { [weak self] result,nextFrom  in
+                guard let self = self else { return }
+                // выключаем вращающийся индикатор
+                self.newRefreshControl.endRefreshing()
+                
+                switch result {
+                case .success (let news):
+                    // проверяем, что более свежие новости действительно есть
+                    guard news!.count > 0 else { return }
+                    // Save user array to Database
+                    // Working with Realm
+                    if (startTime == 0) {
+                        // Если не было рефреша и был первый запрос после загрузки приложения
+                        if let nextFrom = nextFrom {
+                            self.nextFrom = nextFrom
+                        }
+                    }
+                        //Если был рефреш
+                    if let news = news {
+                        self.vkService.realmSaveService.saveNews(news: news)
+                    }
+                case .failure (let error):
+                    debugPrint ("Error of News")
+                    debugPrint (error)
+                }
+            }
         }
     }
 
-    func pairTableAndRealm(completion: @escaping  ([VkApiNewItem]) -> Void ) {
+    private func pairTableAndRealm(completion: @escaping  ([VkApiNewItem]) -> Void ) {
             guard let realm = try? Realm() else { return }
         let objects = realm.objects(VkApiNewItem.self)
         token = objects.observe { (changes: RealmCollectionChange) in
@@ -150,24 +198,65 @@ class MyNewsTableViewController: UITableViewController {
 
         if countImages == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCell", for: indexPath) as! MyNewsTableViewCell
-            cell.setup(new: myNew, photoService: photoService, indexPath: indexPath)
+            cell.config (new: myNew, photoService: photoService, indexPath: indexPath)
+            cell.tap = { [weak self] new in
+                if let myNews = self?.myNews,
+                    let index = myNews.firstIndex(where: { $0.id == new.id }) {
+                    myNews [index].isExpanded.toggle()
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
+                debugPrint (new.id)
+            }
             return cell
         }
         else if countImages == 1 {
            let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForOnePhoto", for: indexPath) as! MyNewsTableViewCellForOnePhoto
-            cell.setup(new: myNew, photoService: photoService, indexPath: indexPath)
+            cell.config (new: myNew, photoService: photoService, indexPath: indexPath)
+            cell.tap = { [weak self] new in
+                if let myNews = self?.myNews,
+                    let index = myNews.firstIndex(where: { $0.id == new.id }) {
+                    myNews [index].isExpanded.toggle()
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
+                debugPrint (new.id)
+            }
+           
             return cell
         } else if countImages == 2  {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForTwoPhotos", for: indexPath) as! MyNewsTableViewCellForTwoPhotos
-            cell.setup(new: myNew, photoService: photoService, indexPath: indexPath)
+            cell.config (new: myNew, photoService: photoService, indexPath: indexPath)
+            cell.tap = { [weak self] new in
+                if let myNews = self?.myNews,
+                    let index = myNews.firstIndex(where: { $0.id == new.id }) {
+                    myNews [index].isExpanded.toggle()
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
+                debugPrint (new.id)
+            }
             return cell
         } else if countImages == 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForThreePhotos", for: indexPath) as! MyNewsTableViewCellForThreePhotos
-            cell.setup(new: myNew, photoService: photoService, indexPath: indexPath)
+            cell.config(new: myNew, photoService: photoService, indexPath: indexPath)
+            cell.tap = { [weak self] new in
+                if let myNews =  self?.myNews,
+                    let index = myNews.firstIndex(where: { $0.id == new.id }) {
+                    myNews [index].isExpanded.toggle()
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
+                debugPrint (new.id)
+            }
             return cell
         } else if countImages > 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyNewsCellForFourPhotos", for: indexPath) as! MyNewsTableViewCellForFourPhotos
-            cell.setup(new: myNew, photoService: photoService, indexPath: indexPath)
+            cell.config (new: myNew, photoService: photoService, indexPath: indexPath)
+            cell.tap = { [weak self] new in
+                if let myNews = self?.myNews,
+                    let index = myNews.firstIndex(where: { $0.id == new.id }) {
+                    myNews [index].isExpanded.toggle()
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
+                debugPrint (new.id)
+            }
             return cell
         } else{
             return cell
@@ -221,5 +310,40 @@ class MyNewsTableViewController: UITableViewController {
     */
 
 }
- 
+
+extension MyNewsTableViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        // Выбираем максимальный номер секции, которую нужно будет отобразить в ближайшее время
+        guard let maxRow = indexPaths.map({ $0.row }).max() else { return }
+        // Проверяем,является ли эта секция одной из трех ближайших к концу
+        if let myNews = self.myNews,
+           maxRow > myNews.count - 3,
+           // Убеждаемся, что мы уже не в процессе загрузки данных
+           !isLoading {
+            // Начинаем загрузку данных и меняем флаг isLoading
+            isLoading = true
+            // Обратите внимание, что сетевой сервис должен уметь обрабатывать входящий параметр nextFrom
+            vkService.loadNewsData(startFrom: nextFrom, typeNew: .photo,.post)
+            // и в качестве результата возвращать не только свежераспарсенные новости, но и nextFrom для будущего запроса
+            {[weak self] (result, nextFrom) in
+                guard let self = self else { return }
+                switch result {
+                case .success(let news):
+                    if let nextFrom = nextFrom {
+                        self.nextFrom = nextFrom
+                    }
+                    if let news = news {
+                        self.vkService.realmSaveService.saveNews(news: news)
+                    }
+                case .failure (let error):
+                    debugPrint ("Error of News")
+                    debugPrint (error)
+                }
+                // Выключаем статус isLoading
+                self.isLoading = false
+            }
+        }
+    }
+}
+
 

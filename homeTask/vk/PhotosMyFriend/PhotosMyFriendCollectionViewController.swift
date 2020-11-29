@@ -133,7 +133,7 @@ class PhotosMyFriendCollectionViewController: UICollectionViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoSelectedFriend", for: indexPath) as! PhotosMyFriendCollectionViewCell
         
         guard let photoFriend  = self.photosFriend [indexPath.row] else {return cell}
-        cell.setup (photoFriend: photoFriend, photoService: photoService, indexPath: indexPath)
+        cell.config (photoFriend: photoFriend, photoService: photoService, indexPath: indexPath)
         return cell
         
         // Configure the cell

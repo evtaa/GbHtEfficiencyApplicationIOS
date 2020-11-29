@@ -32,6 +32,9 @@ class MyFriendsTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        avatarView.translatesAutoresizingMaskIntoConstraints = false
+        userName.translatesAutoresizingMaskIntoConstraints = false
+        button.translatesAutoresizingMaskIntoConstraints = false
     }
     
     func setUserName(text: String) {
@@ -68,10 +71,11 @@ class MyFriendsTableViewCell: UITableViewCell {
         //получаем размер текста, передавая сам текст и шрифт.
         let userNameLabelSize = getLabelSize(text: userName.text!, font: userName.font)
         //рассчитывает координату по оси Х
-        let userNameLabelX = bounds.width - userNameLabelSize.width - indent - 35 - avatarView.bounds.width
+        let userNameLabelX = bounds.width - userNameLabelSize.width - indent  //- 35 - avatarView.bounds.width
         //let userNameLabelX = indent + avatarView.bounds.width
         //рассчитывает координату по оси Y
-        let userNameLabelY = bounds.height - indent - (avatarView.bounds.height + userNameLabelSize.height)/2
+        let userNameLabelY: CGFloat = 60
+        //let userNameLabelY = bounds.height - indent - (avatarView.bounds.height + userNameLabelSize.height)/2 + 40
         //получим точку верхнего левого угла надписи
         let userNameLabelOrigin = CGPoint(x:  userNameLabelX, y: userNameLabelY)
         //получаем фрейм и устанавливаем UILabel
@@ -92,7 +96,7 @@ class MyFriendsTableViewCell: UITableViewCell {
     
     // MARK: Configure Cell
     
-    func setup (user: VkApiUsersItem, photoService: PhotoService?, indexPath: IndexPath) {
+    func config (user: VkApiUsersItem, photoService: PhotoService?, indexPath: IndexPath) {
         if let avatarPhotoURL = user.avatarPhotoURL {
             avatarView.avatarPhoto.image = photoService?.photo(atIndexpath: indexPath, byUrl: avatarPhotoURL)
         }

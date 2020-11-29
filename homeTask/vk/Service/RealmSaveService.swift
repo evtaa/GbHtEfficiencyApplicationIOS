@@ -217,14 +217,24 @@ class RealmSaveService: SaveServiceInterface  {
         }
     }
     
-    func deleteNew (user: VkApiNewItem) {
+    func deleteNews () {
+        
+        do {
+            let deletingNews = realm.objects(VkApiNewItem.self)
+            realm.beginWrite()
+            realm.delete(deletingNews)
+            try realm.commitWrite()
+        }
+        catch {
+            debugPrint (error)
+        }
         
     }
     
     // Loading of users to Realm
-    func readNewList () -> [VkApiUsersItem] {
-       
-        return []
+    func readNewList () -> [VkApiNewItem] {
+        let listNewsBD = realm.objects(VkApiNewItem.self).sorted(byKeyPath: "date")
+        let newList = [VkApiNewItem] (listNewsBD)
+        return newList
     }
-    
 }
