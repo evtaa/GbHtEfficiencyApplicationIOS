@@ -7,9 +7,15 @@ target 'vk' do
 
   # Pods for vk
 
-   pod 'Alamofire', '~> 4.8'
+ pod 'Alamofire', '~> 4.8'
    pod 'RealmSwift'
    pod 'PromiseKit' 
+
+
+   # pod 'Texture', '~>3.0'
+   pod 'Texture'
+ 
+   #pod 'AsyncDisplayKit'
 
    
    # add pods for desired Firebase products

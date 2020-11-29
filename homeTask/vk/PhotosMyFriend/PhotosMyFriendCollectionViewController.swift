@@ -11,7 +11,7 @@ import RealmSwift
 
 class PhotosMyFriendCollectionViewController: UICollectionViewController {
     
-    internal let newRefreshControl = UIRefreshControl()
+    var newRefreshControl = UIRefreshControl()
     
     var friendSelected : VkApiUsersItem?
     var photosFriend = [VkApiPhotoItem?] ()

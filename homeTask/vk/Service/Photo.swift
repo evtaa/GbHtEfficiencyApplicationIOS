@@ -33,7 +33,11 @@ class VkApiPhotoItem: Object, Decodable {
     @objc  dynamic var photoMediumURL: String = ""
     @objc  dynamic var photoLargeURL: String = ""
     
-    //@objc  dynamic var owner: VkApiUsersItem?
+    @objc  dynamic var width: Int = 0
+    @objc  dynamic var height: Int = 0
+    @objc  dynamic var aspectRatio: Int {
+        return Int(self.height/self.width)
+    }
     
     override static func primaryKey() -> String? {
             return "id"
@@ -65,6 +69,8 @@ class VkApiPhotoItem: Object, Decodable {
     enum SizesKeys: String, CodingKey {
         case type
         case src
+        case width
+        case height
     }
 
     convenience required init(from decoder: Decoder) throws {
@@ -95,6 +101,8 @@ class VkApiPhotoItem: Object, Decodable {
                 case "m":
                     self.photoMediumURL = try firstSizeValues.decode(String.self, forKey: .src)
                 case "x":
+                    self.width = try firstSizeValues.decode(Int.self, forKey: .width)
+                    self.height = try firstSizeValues.decode(Int.self, forKey: .height)
                     self.photoLargeURL = try firstSizeValues.decode(String.self, forKey: .src)
                 default:
                     break

@@ -208,22 +208,18 @@ class MyFriendsTableViewController: UITableViewController {
     // MARK: - Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Проверяем идентификатор чтобы убедиться, что это нужный переход
-        if segue.identifier == "getSelectedFriend" {
-            // Создаем указатель контроллера на который будет осуществлен переход
-            let photosMyFriendCollectionViewController = segue.destination as? PhotosMyFriendCollectionViewController
-            // Получаем индекс выделенной ячейки таблицы
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                // Передаем экземпляр объекта класса User контроллеру на который будет осуществлен переход
-                
-                let myFriendNameKey = myFriendNameSectionTitles [indexPath.section]
-                if let myFriendValue = myFriendsDictionary [myFriendNameKey] {
-                    let friend = myFriendValue[indexPath.row]
-                    photosMyFriendCollectionViewController?.friendSelected = friend
-                }
-            }
-        }
+
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        let myFriendNameKey = myFriendNameSectionTitles [indexPath.section]
+        if let myFriendValue = myFriendsDictionary [myFriendNameKey] {
+            let friend = myFriendValue[indexPath.row]
+            let asPhotosMyFriendController = ASPhotosMyFriendController ()
+            asPhotosMyFriendController.friendSelected = friend
+            self.navigationController?.pushViewController(asPhotosMyFriendController, animated: true)
+        }
     }
 }
 
