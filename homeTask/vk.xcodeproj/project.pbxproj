@@ -10,7 +10,6 @@
 		1BD4354612EB0E9C4C880C3D /* Pods_vk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98A29444E337A488ACD89FC /* Pods_vk.framework */; };
 		52B8B03EAE0917087057747D /* Pods_vkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0915BF0360910A9D67F006 /* Pods_vkTests.framework */; };
 		875CD74B66B401402C190E18 /* Pods_vk_vkUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 097242C867B56CCCAF86B6EA /* Pods_vk_vkUITests.framework */; };
-		A806EE352593A31500BA9EDA /* NewsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A806EE342593A31500BA9EDA /* NewsAdapter.swift */; };
 		A818A0A9252605F900E10A8A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A818A0A8252605F900E10A8A /* User.swift */; };
 		A818A0AE2526061000E10A8A /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A818A0AD2526061000E10A8A /* Photo.swift */; };
 		A818A0B32526062600E10A8A /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = A818A0B22526062600E10A8A /* Group.swift */; };
@@ -102,7 +101,6 @@
 		47E63B291E45C197B9BF7F32 /* Pods-vk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vk.debug.xcconfig"; path = "Target Support Files/Pods-vk/Pods-vk.debug.xcconfig"; sourceTree = "<group>"; };
 		A141D3B59019808D020E6E6B /* Pods-vk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vk.release.xcconfig"; path = "Target Support Files/Pods-vk/Pods-vk.release.xcconfig"; sourceTree = "<group>"; };
 		A5CB0FDB5C6B1C33C16F06A7 /* Pods-vkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vkTests.release.xcconfig"; path = "Target Support Files/Pods-vkTests/Pods-vkTests.release.xcconfig"; sourceTree = "<group>"; };
-		A806EE342593A31500BA9EDA /* NewsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsAdapter.swift; sourceTree = "<group>"; };
 		A818A0A8252605F900E10A8A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A818A0AD2526061000E10A8A /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		A818A0B22526062600E10A8A /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
@@ -234,14 +232,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		A806EE332593A2C500BA9EDA /* Adapter */ = {
-			isa = PBXGroup;
-			children = (
-				A806EE342593A31500BA9EDA /* NewsAdapter.swift */,
-			);
-			path = Adapter;
-			sourceTree = "<group>";
-		};
 		A818BE8C250104DC00EEBE6E /* UIView */ = {
 			isa = PBXGroup;
 			children = (
@@ -266,7 +256,6 @@
 				A87D784725614E3A005A7D87 /* PhotoService.swift */,
 				A8C51B1D252A175B00AC0812 /* CoreDataStack.swift */,
 				A8AEB04825211A78009E3780 /* VkServices.swift */,
-				A806EE332593A2C500BA9EDA /* Adapter */,
 				A89D5304255824DD001D4676 /* Operation */,
 				A85F43EA2531CF1C00C00205 /* CoreDataSaveService.swift */,
 				A85F43EF2531D11F00C00205 /* RealmSaveService.swift */,
@@ -760,7 +749,6 @@
 				A8EB8E1224FFD97B00C3DCA6 /* MyNewsTableViewCellForOnePhoto.swift in Sources */,
 				A8DB5477250CFB490001E241 /* CustomNavigationController.swift in Sources */,
 				A85F43F02531D11F00C00205 /* RealmSaveService.swift in Sources */,
-				A806EE352593A31500BA9EDA /* NewsAdapter.swift in Sources */,
 				A8DB5479250D00210001E241 /* CustomInteractiveTransition.swift in Sources */,
 				A85F43EB2531CF1C00C00205 /* CoreDataSaveService.swift in Sources */,
 				A8DB5473250CF1970001E241 /* CustomPushAnimator.swift in Sources */,

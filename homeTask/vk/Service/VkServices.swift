@@ -217,12 +217,17 @@ class VKService {
             }
         }
     }
-       
+    
+    enum TypeNew: String {
+        case post
+        case photo
+    }
+    
     enum loadNewsDataError: Error {
         case invalidNews
     }
     
-    func loadNewsData(startTime: Int = 0, startFrom: String = "", typeNew: [TypeNew], completion: @escaping (Swift.Result <[VkApiNewItem]?, loadNewsDataError>, String?) -> Void){
+    func loadNewsData(startTime: Int = 0, startFrom: String = "", typeNew: TypeNew ..., completion: @escaping (Swift.Result <[VkApiNewItem]?, loadNewsDataError>, String?) -> Void){
         var filters: String = ""
         for item in typeNew {
             switch item {
@@ -232,7 +237,7 @@ class VKService {
                 filters += item.rawValue + ","
             }
         }
-
+        
         let path = "/newsfeed.get"
         let parameters: Parameters = [
             "filters": filters,
@@ -248,7 +253,7 @@ class VKService {
             "v": "5.68",
             "access_token": Session.instance.token!
         ]
-
+        
         // составляем URL из базового адреса сервиса и конкретного метода
         let url = baseUrl+path
         // делаем запрос
@@ -261,7 +266,7 @@ class VKService {
                 var VkApiProfiles: [VkApiUsersItem]?
                 var VkApiGroups: [VkApiGroupItem]?
                 let dispatchGroup = DispatchGroup ()
-
+                
                 DispatchQueue.global().async (group: dispatchGroup) {
                     do {
                         VkApiItems = try JSONDecoder().decode (VkApiNewsResponseItems.self, from: data).response?.items
